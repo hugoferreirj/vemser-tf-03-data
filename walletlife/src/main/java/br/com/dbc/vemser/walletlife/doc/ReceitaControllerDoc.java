@@ -2,6 +2,7 @@ package br.com.dbc.vemser.walletlife.doc;
 
 import br.com.dbc.vemser.walletlife.dto.ReceitaCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.ReceitaDTO;
+import br.com.dbc.vemser.walletlife.exceptions.EntidadeNaoEncontradaException;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,18 +35,18 @@ public interface ReceitaControllerDoc {
             }
     )
     @GetMapping("/{idReceita}")
-    public ResponseEntity<ReceitaDTO> buscarReceita(@PathVariable("idReceita") @Positive Integer id) throws RegraDeNegocioException;
+    public ResponseEntity<ReceitaDTO> buscarReceita(@PathVariable("idReceita") @Positive Integer id) throws RegraDeNegocioException, EntidadeNaoEncontradaException;
 
-    @Operation(summary = "Listar receitas de um usuário", description = "Busca no banco as receitas de um usuário utilizando o ID do usuário")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna as receitas de um usuário"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
-    @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<ReceitaDTO>> listarReceitasPorUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;
+//    @Operation(summary = "Listar receitas de um usuário", description = "Busca no banco as receitas de um usuário utilizando o ID do usuário")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "Retorna as receitas de um usuário"),
+//                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+//                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+//            }
+//    )
+//    @GetMapping("/usuario/{idUsuario}")
+//    public ResponseEntity<List<ReceitaDTO>> listarReceitasPorUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;
 
     @Operation(summary = "Insere uma nova receita", description = "Insere uma nova receita no banco")
     @ApiResponses(
@@ -69,7 +70,7 @@ public interface ReceitaControllerDoc {
     )
     @PutMapping("/{idReceita}")
     public ResponseEntity<ReceitaDTO> editarReceita(@PathVariable("idReceita") Integer id,
-                                                    @Valid @RequestBody ReceitaDTO receitaAtualizar) throws RegraDeNegocioException;
+                                                    @Valid @RequestBody ReceitaDTO receitaAtualizar) throws RegraDeNegocioException, EntidadeNaoEncontradaException;
 
     @Operation(summary = "Deleta uma receita por ID", description = "Busca no banco a receita a partir de um ID e a deleta")
     @ApiResponses(
