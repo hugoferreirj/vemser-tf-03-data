@@ -4,8 +4,9 @@ import br.com.dbc.vemser.walletlife.dto.ReceitaCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.ReceitaDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioDTO;
 import br.com.dbc.vemser.walletlife.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.walletlife.exceptions.EntidadeNaoEncontradaException;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
-import br.com.dbc.vemser.walletlife.modelos.Receita;
+import br.com.dbc.vemser.walletlife.modelos.ReceitaEntity;
 import br.com.dbc.vemser.walletlife.modelos.Usuario;
 import br.com.dbc.vemser.walletlife.repository.ReceitaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,124 +27,93 @@ public class ReceitaService {
 
     // criação
     public ReceitaDTO adicionarReceita(ReceitaCreateDTO receita) throws RegraDeNegocioException {
-        try {
-            UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(receita.getIdFK());
-            Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
+        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(receita.getIdFK());
+        Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
 
-            if (usuarioConvertido != null) {
-                Receita entity = objectMapper.convertValue(receita, Receita.class);
+        if (usuarioConvertido != null) {
+            ReceitaEntity entity = objectMapper.convertValue(receita, ReceitaEntity.class);
 
-                Receita receitaAdicionada = receitaRepository.adicionar(entity);
-                ReceitaDTO receitaDTO = convertToDTO(receitaAdicionada);
+            ReceitaEntity receitaAdicionada = receitaRepository.save(entity);
+            ReceitaDTO receitaDTO = convertToDTO(receitaAdicionada);
 
-                return receitaDTO;
-            } else {
-                throw new RegraDeNegocioException("Usuario não encontrado");
-            }
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
+            return receitaDTO;
+        } else {
+            throw new RegraDeNegocioException("Usuario não encontrado");
         }
-        return null;
     }
 
     // remoção
-    public void removerReceita(Integer idReceita) throws RegraDeNegocioException {
+    public void removerReceita(Integer idReceita) {
+        ReceitaEntity receita = null;
         try {
-            if (buscarById(idReceita) != null) {
-                receitaRepository.remover(idReceita);
-            }
-        } catch (BancoDeDadosException e) {
+            receita = retornarReceitaPeloId(idReceita);
+        } catch (EntidadeNaoEncontradaException e) {
             e.printStackTrace();
         }
+        receitaRepository.delete(receita);
     }
 
     // atualização
-    public ReceitaDTO editarReceita(Integer id, ReceitaDTO receita) throws RegraDeNegocioException {
-        try {
-            receita.setId(id);
-            Receita receitaExsite = receitaRepository.buscarPorId(id);
+    public ReceitaDTO editarReceita(Integer id, ReceitaDTO receita) throws RegraDeNegocioException, EntidadeNaoEncontradaException {
+        receita.setId(id);
 
-            if (receitaExsite.getId() == null){
-                throw new RegraDeNegocioException("Receita não encontrada");
-            }
+        ReceitaDTO entityDTO = convertToDTO(retornarReceitaPeloId(id));
 
-            ReceitaDTO entityDTO = buscarById(id);
+        ReceitaEntity entity = objectMapper.convertValue(entityDTO, ReceitaEntity.class);
 
-
-            Receita entity = objectMapper.convertValue(entityDTO, Receita.class);
-
-            if (entity != null) {
-                entity.setDescricao(receita.getDescricao());
-                entity.setValor(receita.getValor());
-                entity.setIdFK(receita.getIdFK());
-                entity.setBanco(receita.getBanco());
-                entity.setEmpresa(receita.getEmpresa());
-                receitaRepository.editar(id, entity);
-                return receita;
-            }
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
+        if (entity != null) {
+            entity.setDescricao(receita.getDescricao());
+            entity.setValor(receita.getValor());
+            entity.setIdFK(receita.getIdFK());
+            entity.setBanco(receita.getBanco());
+            entity.setEmpresa(receita.getEmpresa());
+            receitaRepository.save(entity);
         }
-        return null;
+        return convertToDTO(entity);
     }
 
     // leitura geral
     public List<ReceitaDTO> listarTodos() {
-        try {
-            List<Receita> receitas = receitaRepository.listar();
-            List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
-            return receitasDTO;
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-        return null;
+        List<ReceitaEntity> receitas = receitaRepository.findAll();
+        List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
+        return receitasDTO;
     }
 
     // Leitura por usuario
-    public List<ReceitaDTO> buscarByIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
-        try {
-            UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
-            Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
+//    public List<ReceitaDTO> buscarByIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
+//        try {
+//            UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+//            Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
+//
+//            if (usuarioConvertido != null) {
+//                List<ReceitaEntity> receitas = receitaRepository.listarPorIdUsuario(idUsuario);
+//                List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
+//                return receitasDTO;
+//            } else {
+//                throw new RegraDeNegocioException("Usuario não encontrado");
+//            }
+//        } catch (BancoDeDadosException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
-            if (usuarioConvertido != null) {
-                List<Receita> receitas = receitaRepository.listarPorIdUsuario(idUsuario);
-                List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
-                return receitasDTO;
-            } else {
-                throw new RegraDeNegocioException("Usuario não encontrado");
-            }
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public ReceitaDTO buscarById(Integer id) throws EntidadeNaoEncontradaException {
+        return convertToDTO(retornarReceitaPeloId(id));
     }
 
-    // leitura por id da receita
-    public ReceitaDTO buscarById(Integer idReceita) {
-        try {
-            Receita receita = receitaRepository.buscarPorId(idReceita);
-            ReceitaDTO receitaDTO = convertToDTO(receita);
-            if (receita.getId() == null) {
-                throw new RegraDeNegocioException("Receita não encontrada");
-            }
-
-            return receitaDTO;
-
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        } catch (RegraDeNegocioException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
+    public ReceitaEntity retornarReceitaPeloId(Integer id) throws EntidadeNaoEncontradaException {
+        return receitaRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Receita não encontrada"));
     }
 
-    private ReceitaDTO convertToDTO(Receita receita){
+    private ReceitaDTO convertToDTO(ReceitaEntity receita) {
         ReceitaDTO receitaDTO = objectMapper.convertValue(receita, ReceitaDTO.class);
 
         return receitaDTO;
     }
 
-    private List<ReceitaDTO> convertToDTOList(List<Receita> listaReceitas){
+    private List<ReceitaDTO> convertToDTOList(List<ReceitaEntity> listaReceitas) {
         return listaReceitas.stream()
                 .map(this::convertToDTO).collect(Collectors.toList());
     }
