@@ -3,7 +3,6 @@ package br.com.dbc.vemser.walletlife.controllers;
 import br.com.dbc.vemser.walletlife.doc.UsuarioControllerDoc;
 import br.com.dbc.vemser.walletlife.dto.UsuarioCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioDTO;
-import br.com.dbc.vemser.walletlife.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.walletlife.service.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,7 @@ public class UsuarioController implements UsuarioControllerDoc {
         this.usuarioService = usuarioService;
     }
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> listar() throws BancoDeDadosException {
+    public ResponseEntity<List<UsuarioDTO>> listar(){
         log.info("Usuário: listar todos");
         return new ResponseEntity<>(usuarioService.listar(), HttpStatus.OK);
     }
