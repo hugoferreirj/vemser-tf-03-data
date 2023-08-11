@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -15,20 +17,25 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity(name = "INVESTIMENTO")
 public class Investimento extends AbstractMovimentoDinheiro{
     @NotNull
+    @Column(name = "tipo")
     private TipoDespesaEReceita tipo;
 
     @NotEmpty
     @Schema(description = "Nome da corretora do investimento", required = true)
+    @Column(name = "corretora")
     protected String corretora;
 
     @NotNull
     @Schema(description = "Data de início do investimento", required = true)
+    @Column(name = "dataInicio")
     private LocalDate dataInicio;
 
     @NotNull
     @Schema(description = "ID de referência associado ao investimento", required = true)
+    @Column(name = "idFK")
     private int idFK;
 
     public Investimento(TipoDespesaEReceita tipo, Double valor, String descricao) {
