@@ -2,7 +2,6 @@ package br.com.dbc.vemser.walletlife.doc;
 
 import br.com.dbc.vemser.walletlife.dto.UsuarioCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioDTO;
-import br.com.dbc.vemser.walletlife.exceptions.BancoDeDadosException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +24,7 @@ public interface UsuarioControllerDoc {
     )
 
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> listar() throws BancoDeDadosException;
+    public ResponseEntity<List<UsuarioDTO>> listar();
 
     @Operation(summary = "Listar Usuários por ID", description = "Busca no banco o usuário a partir de um ID")
     @ApiResponses(
