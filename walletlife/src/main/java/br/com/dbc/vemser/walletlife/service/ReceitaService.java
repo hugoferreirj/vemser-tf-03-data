@@ -3,10 +3,9 @@ package br.com.dbc.vemser.walletlife.service;
 import br.com.dbc.vemser.walletlife.dto.ReceitaCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.ReceitaDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioDTO;
-import br.com.dbc.vemser.walletlife.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.walletlife.exceptions.EntidadeNaoEncontradaException;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
-import br.com.dbc.vemser.walletlife.modelos.ReceitaEntity;
+import br.com.dbc.vemser.walletlife.modelos.Receita;
 import br.com.dbc.vemser.walletlife.modelos.Usuario;
 import br.com.dbc.vemser.walletlife.repository.ReceitaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,46 +24,43 @@ public class ReceitaService {
     private final UsuarioService usuarioService;
 
 
-    // criação
-    public ReceitaDTO adicionarReceita(ReceitaCreateDTO receita) throws RegraDeNegocioException {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(receita.getIdFK());
+    public ReceitaDTO create(ReceitaCreateDTO receita) throws RegraDeNegocioException {
+        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(receita.getUsuario().getIdUsuario());
         Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
 
         if (usuarioConvertido != null) {
-            ReceitaEntity entity = objectMapper.convertValue(receita, ReceitaEntity.class);
+            Receita entity = objectMapper.convertValue(receita, Receita.class);
 
-            ReceitaEntity receitaAdicionada = receitaRepository.save(entity);
+            Receita receitaAdicionada = receitaRepository.save(entity);
             ReceitaDTO receitaDTO = convertToDTO(receitaAdicionada);
 
             return receitaDTO;
         } else {
-            throw new RegraDeNegocioException("Usuario não encontrado");
+            throw new RegraDeNegocioException("Usuário não encontrado");
         }
     }
 
-    // remoção
-    public void removerReceita(Integer idReceita) {
-        ReceitaEntity receita = null;
+    public void remove(Integer idReceita) {
+        Receita receita = null;
         try {
-            receita = retornarReceitaPeloId(idReceita);
+            receita = returnReceitaEntityById(idReceita);
         } catch (EntidadeNaoEncontradaException e) {
             e.printStackTrace();
         }
         receitaRepository.delete(receita);
     }
 
-    // atualização
-    public ReceitaDTO editarReceita(Integer id, ReceitaDTO receita) throws RegraDeNegocioException, EntidadeNaoEncontradaException {
+    public ReceitaDTO update(Integer id, ReceitaDTO receita) throws EntidadeNaoEncontradaException {
         receita.setId(id);
 
-        ReceitaDTO entityDTO = convertToDTO(retornarReceitaPeloId(id));
+        ReceitaDTO entityDTO = convertToDTO(returnReceitaEntityById(id));
 
-        ReceitaEntity entity = objectMapper.convertValue(entityDTO, ReceitaEntity.class);
+        Receita entity = objectMapper.convertValue(entityDTO, Receita.class);
 
         if (entity != null) {
             entity.setDescricao(receita.getDescricao());
             entity.setValor(receita.getValor());
-            entity.setIdFK(receita.getIdFK());
+            entity.setUsuario(receita.getUsuario());
             entity.setBanco(receita.getBanco());
             entity.setEmpresa(receita.getEmpresa());
             receitaRepository.save(entity);
@@ -72,48 +68,41 @@ public class ReceitaService {
         return convertToDTO(entity);
     }
 
-    // leitura geral
-    public List<ReceitaDTO> listarTodos() {
-        List<ReceitaEntity> receitas = receitaRepository.findAll();
+    public List<ReceitaDTO> findAll() {
+        List<Receita> receitas = receitaRepository.findAll();
         List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
         return receitasDTO;
     }
 
-    // Leitura por usuario
-//    public List<ReceitaDTO> buscarByIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
-//        try {
-//            UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
-//            Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
-//
-//            if (usuarioConvertido != null) {
-//                List<ReceitaEntity> receitas = receitaRepository.listarPorIdUsuario(idUsuario);
-//                List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
-//                return receitasDTO;
-//            } else {
-//                throw new RegraDeNegocioException("Usuario não encontrado");
-//            }
-//        } catch (BancoDeDadosException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public List<ReceitaDTO> findByUsuario(Integer idUsuario) throws RegraDeNegocioException {
+        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+        Usuario usuarioEntity = objectMapper.convertValue(usuarioById, Usuario.class);
 
-    public ReceitaDTO buscarById(Integer id) throws EntidadeNaoEncontradaException {
-        return convertToDTO(retornarReceitaPeloId(id));
+        if (usuarioEntity != null) {
+            List<Receita> receitas = receitaRepository.findByUsuario(usuarioEntity);
+            List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
+            return receitasDTO;
+        } else {
+            throw new RegraDeNegocioException("Usuario não encontrado");
+        }
     }
 
-    public ReceitaEntity retornarReceitaPeloId(Integer id) throws EntidadeNaoEncontradaException {
+    public ReceitaDTO findById(Integer id) throws EntidadeNaoEncontradaException {
+        return convertToDTO(returnReceitaEntityById(id));
+    }
+
+    public Receita returnReceitaEntityById(Integer id) throws EntidadeNaoEncontradaException {
         return receitaRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Receita não encontrada"));
     }
 
-    private ReceitaDTO convertToDTO(ReceitaEntity receita) {
+    private ReceitaDTO convertToDTO(Receita receita) {
         ReceitaDTO receitaDTO = objectMapper.convertValue(receita, ReceitaDTO.class);
 
         return receitaDTO;
     }
 
-    private List<ReceitaDTO> convertToDTOList(List<ReceitaEntity> listaReceitas) {
+    private List<ReceitaDTO> convertToDTOList(List<Receita> listaReceitas) {
         return listaReceitas.stream()
                 .map(this::convertToDTO).collect(Collectors.toList());
     }
