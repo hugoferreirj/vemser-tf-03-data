@@ -13,5 +13,5 @@ import java.util.List;
 
 @Repository
 public interface DespesaRepository extends JpaRepository<Despesa,Integer> {
-    List<Despesa> listDespesaListByIdFK(Integer idFk);
+//    List<Despesa> listDespesaListByIdFK(Integer idFk);
 }

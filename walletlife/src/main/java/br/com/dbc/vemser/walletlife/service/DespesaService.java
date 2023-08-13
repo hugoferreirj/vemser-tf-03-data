@@ -3,7 +3,6 @@ package br.com.dbc.vemser.walletlife.service;
 import br.com.dbc.vemser.walletlife.dto.DespesaCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.DespesaDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioDTO;
-import br.com.dbc.vemser.walletlife.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.walletlife.modelos.Despesa;
 import br.com.dbc.vemser.walletlife.modelos.Usuario;
@@ -67,16 +66,17 @@ public class DespesaService {
 
     // leitura
     public List<DespesaDTO> listarDespesaByIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
-        Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
-
-        if (usuarioById != null) {
-            List<Despesa> despesas = despesaRepository.listDespesaListByIdFK(idUsuario);
-            List<DespesaDTO> despesasDTO = this.convertToDTOList(despesas);
-            return despesasDTO;
-        } else {
-            throw new RegraDeNegocioException("Usuario não encontrado");
-        }
+//        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+//        Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
+//
+//        if (usuarioById != null) {
+//            List<Despesa> despesas = despesaRepository.findAllByIdFK(idUsuario);
+//            List<DespesaDTO> despesasDTO = this.convertToDTOList(despesas);
+//            return despesasDTO;
+//        } else {
+//            throw new RegraDeNegocioException("Usuario não encontrado");
+//        }
+        return null;
     }
 
     public List<DespesaDTO> listar() {

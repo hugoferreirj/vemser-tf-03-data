@@ -7,8 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -19,7 +18,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity(name = "INVESTIMENTO")
 public class Investimento extends AbstractMovimentoDinheiro{
-    @NotNull
+
+    @Id
+    private Integer idInvestimento;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
     private TipoDespesaEReceita tipo;
 
@@ -30,13 +33,13 @@ public class Investimento extends AbstractMovimentoDinheiro{
 
     @NotNull
     @Schema(description = "Data de início do investimento", required = true)
-    @Column(name = "dataInicio")
+    @Column(name = "DATA_INICIAL")
     private LocalDate dataInicio;
 
-    @NotNull
-    @Schema(description = "ID de referência associado ao investimento", required = true)
-    @Column(name = "idFK")
-    private int idFK;
+//    @NotNull
+//    @Schema(description = "ID de referência associado ao investimento", required = true)
+//    @Column(name = "idFK")
+//    private int idFK;
 
     public Investimento(TipoDespesaEReceita tipo, Double valor, String descricao) {
     }

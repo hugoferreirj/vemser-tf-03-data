@@ -26,6 +26,7 @@ public class Despesa {
     @NotNull
     private Integer idDespesa;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
     private TipoDespesaEReceita tipo;
 
@@ -34,10 +35,10 @@ public class Despesa {
     @Column(name = "data_pagamento")
     private LocalDate dataPagamento;
 
-    @NotNull
-    @Schema(description = "ID de referência associado a despesa", required = true)
-    @Column(name = "idFK")
-    private int idFK;
+//    @NotNull
+//    @Schema(description = "ID de referência associado a despesa", required = true)
+//    @Column(name = "idFK")
+//    private int idFK;
 
     @NotNull
     @Schema(description = "Valor da despesa", required = true)
