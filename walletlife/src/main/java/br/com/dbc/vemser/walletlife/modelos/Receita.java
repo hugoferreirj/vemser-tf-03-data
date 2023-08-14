@@ -6,15 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "RECEITA")
-public class Receita extends AbstractMovimentoDinheiro{
+public class Receita{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RECEITA_SEQ")
@@ -22,25 +19,17 @@ public class Receita extends AbstractMovimentoDinheiro{
     @Column(name = "id_receita")
     private Integer id;
 
-    @NotNull
     @Column(name = "valor")
     private Double valor;
 
-    @NotNull
-    @Size(min = 5, max = 30)
     @Column(name = "descricao")
     private String descricao;
 
-    @NotEmpty
     @Column(name = "banco")
     private String banco;
 
-    @NotEmpty
     @Column(name = "empresa")
     private String empresa;
-
-//    @Column(name = "id_usuario")
-//    private Integer idFK;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

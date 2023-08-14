@@ -38,19 +38,19 @@ public class ReceitaController implements ReceitaControllerDoc {
         return new ResponseEntity<>(receitaService.findByUsuario(id), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<ReceitaDTO> create(@Valid @RequestBody ReceitaCreateDTO receita) throws RegraDeNegocioException {
-        return new ResponseEntity<>(receitaService.create(receita), HttpStatus.OK);
+    @PostMapping("/{idUsuario}")
+    public ResponseEntity<ReceitaDTO> create(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody ReceitaCreateDTO receita) throws RegraDeNegocioException {
+        return new ResponseEntity<>(receitaService.create(receita, idUsuario), HttpStatus.OK);
     }
 
     @PutMapping("/{idReceita}")
     public ResponseEntity<ReceitaDTO> update(@PathVariable("idReceita") Integer id,
-                                             @Valid @RequestBody ReceitaDTO receitaAtualizar) throws EntidadeNaoEncontradaException {
+                                             @Valid @RequestBody ReceitaDTO receitaAtualizar){
         return new ResponseEntity<>(receitaService.update(id, receitaAtualizar), HttpStatus.OK);
     }
 
     @DeleteMapping("/{idReceita}")
-    public ResponseEntity<Void> remove(@PathVariable("idReceita") Integer id){
+    public ResponseEntity<Void> remove(@PathVariable("idReceita") Integer id) {
         receitaService.remove(id);
         return ResponseEntity.ok().build();
     }

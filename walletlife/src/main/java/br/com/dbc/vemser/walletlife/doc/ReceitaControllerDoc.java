@@ -56,8 +56,8 @@ public interface ReceitaControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping
-    public ResponseEntity<ReceitaDTO> create(@Valid @RequestBody ReceitaCreateDTO receita) throws RegraDeNegocioException;
+    @PostMapping("/{idUsuario}")
+    public ResponseEntity<ReceitaDTO> create(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody ReceitaCreateDTO receita) throws RegraDeNegocioException;
 
 
     @Operation(summary = "Atualiza uma receita por ID", description = "Busca no banco a receita a partir de um ID e a atualiza")
@@ -70,7 +70,7 @@ public interface ReceitaControllerDoc {
     )
     @PutMapping("/{idReceita}")
     public ResponseEntity<ReceitaDTO> update(@PathVariable("idReceita") Integer id,
-                                             @Valid @RequestBody ReceitaDTO receitaAtualizar) throws EntidadeNaoEncontradaException;
+                                             @Valid @RequestBody ReceitaDTO receitaAtualizar);
 
     @Operation(summary = "Deleta uma receita por ID", description = "Busca no banco a receita a partir de um ID e a deleta")
     @ApiResponses(

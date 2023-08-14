@@ -10,9 +10,11 @@ import br.com.dbc.vemser.walletlife.modelos.Usuario;
 import br.com.dbc.vemser.walletlife.repository.ReceitaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,17 +26,17 @@ public class ReceitaService {
     private final UsuarioService usuarioService;
 
 
-    public ReceitaDTO create(ReceitaCreateDTO receita) throws RegraDeNegocioException {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(receita.getUsuario().getIdUsuario());
-        Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
-
-        if (usuarioConvertido != null) {
+    public ReceitaDTO create(ReceitaCreateDTO receita, Integer idUsuario) throws RegraDeNegocioException {
+        System.out.println("ENTROU AQUI");
+        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+        if (usuarioById != null) {
+            Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
             Receita entity = objectMapper.convertValue(receita, Receita.class);
-
+            entity.setUsuario(usuarioConvertido);
+            System.out.println(entity.toString());
+            System.out.println("Testee");
             Receita receitaAdicionada = receitaRepository.save(entity);
-            ReceitaDTO receitaDTO = convertToDTO(receitaAdicionada);
-
-            return receitaDTO;
+            return convertToDTO(receitaAdicionada);
         } else {
             throw new RegraDeNegocioException("Usuário não encontrado");
         }
@@ -50,25 +52,27 @@ public class ReceitaService {
         receitaRepository.delete(receita);
     }
 
-    public ReceitaDTO update(Integer id, ReceitaDTO receita) throws EntidadeNaoEncontradaException {
-        receita.setId(id);
+    public ReceitaDTO update(Integer id, ReceitaDTO receita) {
+        try {
+            Optional<Receita> receitaExisteOp = receitaRepository.findById(id);
+            if (receitaExisteOp.isEmpty()) {
+                throw new RegraDeNegocioException("Receita não encontrada");
+            }
+            Receita receitaDados = objectMapper.convertValue(receita, Receita.class);
+            Receita receitaExiste = receitaExisteOp.get();
 
-        ReceitaDTO entityDTO = convertToDTO(returnReceitaEntityById(id));
+            BeanUtils.copyProperties(receitaDados, receitaExiste, "id", "usuario");
 
-        Receita entity = objectMapper.convertValue(entityDTO, Receita.class);
+            Receita receitaAtualizada = receitaRepository.save(receitaExiste);
 
-        if (entity != null) {
-            entity.setDescricao(receita.getDescricao());
-            entity.setValor(receita.getValor());
-            entity.setUsuario(receita.getUsuario());
-            entity.setBanco(receita.getBanco());
-            entity.setEmpresa(receita.getEmpresa());
-            receitaRepository.save(entity);
+            return convertToDTO(receitaAtualizada);
+        } catch (RegraDeNegocioException e) {
+            throw new RuntimeException(e);
         }
-        return convertToDTO(entity);
     }
 
     public List<ReceitaDTO> findAll() {
+        System.out.println("IMRPESSAO");
         List<Receita> receitas = receitaRepository.findAll();
         List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
         return receitasDTO;
