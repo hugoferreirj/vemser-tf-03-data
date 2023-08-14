@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.walletlife.modelos;
 
 import br.com.dbc.vemser.walletlife.enumerators.TipoDespesaEReceita;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,7 @@ public class Despesa {
     @NotNull
     private Integer idDespesa;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
     private TipoDespesaEReceita tipo;
 
@@ -34,10 +36,7 @@ public class Despesa {
     @Column(name = "data_pagamento")
     private LocalDate dataPagamento;
 
-    @NotNull
-    @Schema(description = "ID de referência associado a despesa", required = true)
-    @Column(name = "idFK")
-    private int idFK;
+
 
     @NotNull
     @Schema(description = "Valor da despesa", required = true)
@@ -49,4 +48,10 @@ public class Despesa {
     @Size(min = 5, max = 30)
     @Column(name = "descricao")
     private String descricao;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private Usuario usuario;
+
 }

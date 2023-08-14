@@ -39,5 +39,5 @@ public class InvestimentoCreateDTO {
 
     @NotNull
     @Schema(description = "ID da chave estrangeira", required = true, example = "1")
-    private int idFK;
+    private int idUsuario;
 }

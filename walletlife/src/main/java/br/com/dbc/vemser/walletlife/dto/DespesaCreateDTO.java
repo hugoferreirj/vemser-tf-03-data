@@ -29,5 +29,5 @@ public class DespesaCreateDTO {
     @NotNull
     private LocalDate dataPagamento;
 
-    private int idFK;
+    private int idUsuario;
 }

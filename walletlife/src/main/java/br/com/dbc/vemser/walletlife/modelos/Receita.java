@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "RECEITA")
-public class Receita {
+public class Receita extends AbstractMovimentoDinheiro{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RECEITA_SEQ")

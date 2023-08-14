@@ -26,7 +26,7 @@ public class DespesaController implements DespesaControllerDoc {
 
     @GetMapping
     public ResponseEntity<List<DespesaDTO>> listarTodos(){
-        return new ResponseEntity<>(despesaService.listarTodos(), HttpStatus.OK);
+        return new ResponseEntity<>(despesaService.listar(), HttpStatus.OK);
     }
 
     @GetMapping("/{idDespesa}")

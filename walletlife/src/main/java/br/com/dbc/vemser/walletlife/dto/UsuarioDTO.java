@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UsuarioDTO extends  UsuarioCreateDTO{
-    private Integer id;
+    private Integer idUsuario;
 }

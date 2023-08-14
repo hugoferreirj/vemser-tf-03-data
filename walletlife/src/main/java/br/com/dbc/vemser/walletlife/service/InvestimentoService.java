@@ -24,7 +24,7 @@ public class InvestimentoService {
 
     // criação de um objeto
     public InvestimentoDTO adicionarInvestimento(InvestimentoCreateDTO investimento) throws RegraDeNegocioException {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(investimento.getIdFK());
+        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(investimento.getIdUsuario());
         Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
 
         if (usuarioConvertido != null){
@@ -35,7 +35,7 @@ public class InvestimentoService {
             entity.setDataInicio(investimento.getDataInicio());
             entity.setTipo(investimento.getTipo());
             entity.setCorretora(investimento.getCorretora());
-            entity.setIdFK(investimento.getIdFK());
+//            entity.setIdFK(investimento.getIdFK());
 
             Investimento investimentoAdicionado = investimentoRepository.save(entity);
 
@@ -57,7 +57,7 @@ public class InvestimentoService {
 
     // atualização de um objeto
     public InvestimentoDTO editarInvestimento(Integer id, InvestimentoCreateDTO investimento) throws RegraDeNegocioException  {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(investimento.getIdFK());
+        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(investimento.getIdUsuario());
         Usuario usuarioConvertid = objectMapper.convertValue(usuarioById, Usuario.class);
 
         if (usuarioConvertid != null){
@@ -68,7 +68,7 @@ public class InvestimentoService {
             entity.setDataInicio(investimento.getDataInicio());
             entity.setTipo(investimento.getTipo());
             entity.setCorretora(investimento.getCorretora());
-            entity.setIdFK(investimento.getIdFK());
+//            entity.setIdFK(investimento.getIdFK());
 
             Investimento investimentoAtualizado = investimentoRepository.save(entity);
 
@@ -88,7 +88,7 @@ public class InvestimentoService {
         try {
             Investimento investimento = investimentoRepository.findById(idInvestimento).get();
             InvestimentoDTO investimentoDTO = convertToDTO(investimento);
-            if (investimento.getId() == null){
+            if (investimento.getIdInvestimento() == null){
                 throw new RegraDeNegocioException("Investimento não encontrado");
             }
 
@@ -106,17 +106,18 @@ public class InvestimentoService {
     // Leitura por usuario
     public List<InvestimentoDTO> buscarByIdUsuario(Integer idUsuario) throws RegraDeNegocioException   {
 
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
-        Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
-
-        if (usuarioById != null){
-            List<Investimento> investimento = investimentoRepository.listInvestimentoListByIdFK(idUsuario);
-            List<InvestimentoDTO> investimentoDTO = convertToDTOList(investimento);
-
-            return investimentoDTO;
-        }else {
-            throw new RegraDeNegocioException("Usuario não encontrado");
-        }
+//        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+//        Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
+//
+//        if (usuarioById != null){
+//            List<Investimento> investimento = investimentoRepository.findAllByIdFK(idUsuario);
+//            List<InvestimentoDTO> investimentoDTO = convertToDTOList(investimento);
+//
+//            return investimentoDTO;
+//        }else {
+//            throw new RegraDeNegocioException("Usuario não encontrado");
+//        }
+        return null;
     }
 
     public Investimento convertToEntity(InvestimentoCreateDTO dto) {
