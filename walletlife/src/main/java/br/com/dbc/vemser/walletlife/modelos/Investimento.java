@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.walletlife.modelos;
 
 import br.com.dbc.vemser.walletlife.enumerators.TipoDespesaEReceita;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 public class Investimento extends AbstractMovimentoDinheiro{
 
     @Id
+    //sequence
     private Integer idInvestimento;
 
     @Enumerated(EnumType.STRING)
@@ -36,11 +38,8 @@ public class Investimento extends AbstractMovimentoDinheiro{
     @Column(name = "DATA_INICIAL")
     private LocalDate dataInicio;
 
-//    @NotNull
-//    @Schema(description = "ID de referência associado ao investimento", required = true)
-//    @Column(name = "idFK")
-//    private int idFK;
-
-    public Investimento(TipoDespesaEReceita tipo, Double valor, String descricao) {
-    }
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private Usuario usuario;
 }

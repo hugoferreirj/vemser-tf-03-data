@@ -41,12 +41,12 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Receita> receitas = new HashSet<>();
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Despesa> despesas = new HashSet<>();
-//
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Investimento> investimentos = new HashSet<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Despesa> despesas = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Investimento> investimentos = new HashSet<>();
 
 }
