@@ -41,9 +41,9 @@ public class DespesaController implements DespesaControllerDoc {
         return new ResponseEntity<>(despesaService.listarDespesaByIdUsuario(id), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<DespesaDTO> adicionarDespesa(@Valid @RequestBody DespesaCreateDTO despesa) throws RegraDeNegocioException {
-        return new ResponseEntity<>(despesaService.adicionarDespesa(despesa), HttpStatus.OK);
+    @PostMapping("/{idUsuario}")
+    public ResponseEntity<DespesaDTO> adicionarDespesa(@PathVariable("idUsuario") Integer idUsuario,@Valid @RequestBody DespesaCreateDTO despesa) throws RegraDeNegocioException {
+        return new ResponseEntity<>(despesaService.adicionarDespesa(despesa,idUsuario), HttpStatus.OK);
     }
 
     @PutMapping("/{idDespesa}")
