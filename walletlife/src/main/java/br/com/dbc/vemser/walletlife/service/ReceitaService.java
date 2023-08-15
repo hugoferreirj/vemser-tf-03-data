@@ -11,6 +11,9 @@ import br.com.dbc.vemser.walletlife.repository.ReceitaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,9 +69,10 @@ public class ReceitaService {
         }
     }
 
-    public List<ReceitaDTO> findAll() {
-        List<Receita> receitas = receitaRepository.findAll();
-        List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
+    public List<ReceitaDTO> findAll(Integer pagina, Integer quantidadeRegistros) {
+        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
+        Page<Receita> receitas = receitaRepository.findAll(pageable);
+        List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas.getContent());
         return receitasDTO;
     }
 

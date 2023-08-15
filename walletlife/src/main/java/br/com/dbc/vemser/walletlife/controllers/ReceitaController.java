@@ -22,8 +22,8 @@ public class ReceitaController implements ReceitaControllerDoc {
     private final ReceitaService receitaService;
 
     @GetMapping
-    public ResponseEntity<List<ReceitaDTO>> findAll() {
-        return new ResponseEntity<>(receitaService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<ReceitaDTO>> findAll(Integer pagina, Integer quantidadeRegistros) {
+        return new ResponseEntity<>(receitaService.findAll(pagina, quantidadeRegistros), HttpStatus.OK);
     }
 
     @GetMapping("/{idReceita}")

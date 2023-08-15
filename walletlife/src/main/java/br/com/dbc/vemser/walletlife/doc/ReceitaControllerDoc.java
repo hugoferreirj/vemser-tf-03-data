@@ -22,7 +22,7 @@ public interface ReceitaControllerDoc {
             }
     )
     @GetMapping
-    public ResponseEntity<List<ReceitaDTO>> findAll();
+    public ResponseEntity<List<ReceitaDTO>> findAll(Integer pagina, Integer quantidadeRegistros);
 
     @Operation(summary = "Buscar receita no banco", description = "Busca no banco a receita a partir de um ID")
     @ApiResponses(
