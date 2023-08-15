@@ -31,19 +31,16 @@ public class Despesa {
     @Column(name = "tipo")
     private TipoDespesaEReceita tipo;
 
-    @NotEmpty
     @Schema(description = "Data do pagamento", required = true)
     @Column(name = "data_pagamento")
     private LocalDate dataPagamento;
 
 
 
-    @NotNull
     @Schema(description = "Valor da despesa", required = true)
     @Column(name = "valor")
     private Double valor;
 
-    @NotNull
     @Schema(description = "Descricao da despesa", required = true)
     @Size(min = 5, max = 30)
     @Column(name = "descricao")

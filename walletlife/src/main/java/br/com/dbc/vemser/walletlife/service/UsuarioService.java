@@ -1,9 +1,6 @@
 package br.com.dbc.vemser.walletlife.service;
 
-import br.com.dbc.vemser.walletlife.dto.UsuarioComDespesaDTO;
-import br.com.dbc.vemser.walletlife.dto.UsuarioComReceitaDTO;
-import br.com.dbc.vemser.walletlife.dto.UsuarioCreateDTO;
-import br.com.dbc.vemser.walletlife.dto.UsuarioDTO;
+import br.com.dbc.vemser.walletlife.dto.*;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.walletlife.modelos.Usuario;
 import br.com.dbc.vemser.walletlife.repository.UsuarioRepository;
@@ -111,6 +108,10 @@ public class UsuarioService {
 
     public Set<UsuarioComReceitaDTO> findallUsuarioReceita(Double valor){
         return usuarioRepository.findallUsuarioReceita(valor);
+    }
+
+    public Set<UsuarioComInvestimentoDTO> findUsuariosByInvestimentoCorretora(String corretora){
+        return usuarioRepository.findUsuariosByInvestimentoCorretora(corretora);
     }
 
     private UsuarioDTO convertToDTO(Usuario usuario) {

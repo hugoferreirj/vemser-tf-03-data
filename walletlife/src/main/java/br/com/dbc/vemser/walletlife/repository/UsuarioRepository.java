@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.walletlife.repository;
 
 import br.com.dbc.vemser.walletlife.dto.UsuarioComDespesaDTO;
+import br.com.dbc.vemser.walletlife.dto.UsuarioComInvestimentoDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioComReceitaDTO;
 import br.com.dbc.vemser.walletlife.modelos.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,24 +18,24 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
         SELECT NEW br.com.dbc.vemser.walletlife.dto.UsuarioComDespesaDTO(u.idUsuario, u.nome, d.idDespesa, d.valor, d.descricao)
         FROM Usuario u
         JOIN u.despesas d
-        where d.usuario.idUsuario = u.idUsuario
     """)
     Set<UsuarioComDespesaDTO> findAllUsuariosDespesa();
 
-//    @Query("""
-//        SELECT NEW br.com.dbc.vemser.walletlife.dto.UsuarioComDespesaDTO(u.idUsuario, u.nome, d.idDespesa, d.valor, d.descricao)
-//        FROM Usuario u
-//        JOIN u.despesas d
-//        where d.usuario.idUsuario = u.idUsuario
-//    """)
-//    Set<UsuarioComDespesaDTO> findallUsuarioReceita();
+    @Query("""
+        SELECT NEW br.com.dbc.vemser.walletlife.dto.UsuarioComInvestimentoDTO
+        (u.idUsuario, u.nome, i.idInvestimento, i.valor, i.corretora)
+        FROM Usuario u
+        JOIN u.investimentos i
+        WHERE (:corretora is null OR trim(upper(i.corretora)) = trim(upper(:corretora)))
+    """)
+    Set<UsuarioComInvestimentoDTO> findUsuariosByInvestimentoCorretora(String corretora);
 
     @Query("""
         SELECT new br.com.dbc.vemser.walletlife.dto.UsuarioComReceitaDTO
         (u.idUsuario, u.nome, r.id, r.valor, r.descricao, r.banco)
         FROM Usuario u
         JOIN u.receitas r
-        WHERE (:valor is null or r.valor = :valor)
+        WHERE (:valor is null or r.valor > :valor)
     """)
     Set<UsuarioComReceitaDTO> findallUsuarioReceita(@Param("valor") Double valor);
 }
