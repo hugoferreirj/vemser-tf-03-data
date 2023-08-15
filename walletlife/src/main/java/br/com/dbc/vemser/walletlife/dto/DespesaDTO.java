@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DespesaDTO extends DespesaCreateDTO{
-    private int id;
+    private int idDespesa;
 
 }

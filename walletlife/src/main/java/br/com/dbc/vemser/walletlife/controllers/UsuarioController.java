@@ -1,10 +1,7 @@
 package br.com.dbc.vemser.walletlife.controllers;
 
 import br.com.dbc.vemser.walletlife.doc.UsuarioControllerDoc;
-import br.com.dbc.vemser.walletlife.dto.UsuarioComDespesaDTO;
-import br.com.dbc.vemser.walletlife.dto.UsuarioComReceitaDTO;
-import br.com.dbc.vemser.walletlife.dto.UsuarioCreateDTO;
-import br.com.dbc.vemser.walletlife.dto.UsuarioDTO;
+import br.com.dbc.vemser.walletlife.dto.*;
 import br.com.dbc.vemser.walletlife.service.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -48,6 +45,12 @@ public class UsuarioController implements UsuarioControllerDoc {
     public ResponseEntity<Set<UsuarioComReceitaDTO>> findallUsuarioReceita(
             @RequestParam(value = "valor", required = false) Double valor){
         return new ResponseEntity<>(usuarioService.findallUsuarioReceita(valor), HttpStatus.OK);
+    }
+
+    @GetMapping("/usuario-investimento")
+    public ResponseEntity<Set<UsuarioComInvestimentoDTO>> findUsuariosByInvestimentoCorretora(
+            @RequestParam(value = "corretora", required = false) String corretora){
+        return new ResponseEntity<>(usuarioService.findUsuariosByInvestimentoCorretora(corretora), HttpStatus.OK);
     }
 
     @PostMapping

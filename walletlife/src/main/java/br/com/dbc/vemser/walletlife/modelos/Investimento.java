@@ -26,11 +26,9 @@ public class Investimento {
     @Column(name = "id_investimento")
     private Integer idInvestimento;
 
-    @NotNull
     @Column(name = "valor")
     private Double valor;
 
-    @NotNull
     @Size(min = 5, max = 30)
     @Column(name = "descricao")
     private String descricao;
@@ -39,12 +37,10 @@ public class Investimento {
     @Column(name = "tipo")
     private TipoDespesaEReceita tipo;
 
-    @NotEmpty
     @Schema(description = "Nome da corretora do investimento", required = true)
     @Column(name = "corretora")
     protected String corretora;
 
-    @NotNull
     @Schema(description = "Data de início do investimento", required = true)
     @Column(name = "DATA_INICIAL")
     private LocalDate dataInicio;
