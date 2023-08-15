@@ -31,5 +31,4 @@ public class ReceitaCreateDTO {
     @Schema(description = "Nome da empresa", required = true, example = "Empresa XYZ")
     private String empresa;
 
-    private int idFK;
 }

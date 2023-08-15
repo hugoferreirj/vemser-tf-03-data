@@ -1,23 +1,38 @@
 package br.com.dbc.vemser.walletlife.modelos;
 
-import br.com.dbc.vemser.walletlife.enumerators.TipoDespesaEReceita;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.*;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Receita extends AbstractMovimentoDinheiro {
-    @NotEmpty
+@Entity(name = "RECEITA")
+public class Receita{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RECEITA_SEQ")
+    @SequenceGenerator(name = "RECEITA_SEQ", sequenceName = "SEQ_RECEITA", allocationSize = 1)
+    @Column(name = "id_receita")
+    private Integer id;
+
+    @Column(name = "valor")
+    private Double valor;
+
+    @Column(name = "descricao")
+    private String descricao;
+
+    @Column(name = "banco")
     private String banco;
 
-    @NotEmpty
+    @Column(name = "empresa")
     private String empresa;
 
-    private Integer idFK;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private Usuario usuario;
 }

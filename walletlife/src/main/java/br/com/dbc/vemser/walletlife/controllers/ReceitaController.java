@@ -3,6 +3,7 @@ package br.com.dbc.vemser.walletlife.controllers;
 import br.com.dbc.vemser.walletlife.doc.ReceitaControllerDoc;
 import br.com.dbc.vemser.walletlife.dto.ReceitaCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.ReceitaDTO;
+import br.com.dbc.vemser.walletlife.exceptions.EntidadeNaoEncontradaException;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.walletlife.service.ReceitaService;
 import lombok.Data;
@@ -23,34 +24,34 @@ public class ReceitaController implements ReceitaControllerDoc {
     private final ReceitaService receitaService;
 
     @GetMapping
-    public ResponseEntity<List<ReceitaDTO>> listarTodos(){
-        return new ResponseEntity<>(receitaService.listarTodos(), HttpStatus.OK);
+    public ResponseEntity<List<ReceitaDTO>> findAll() {
+        return new ResponseEntity<>(receitaService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{idReceita}")
-    public ResponseEntity<ReceitaDTO> buscarReceita(@PathVariable("idReceita") @Positive Integer id) throws RegraDeNegocioException{
-        return new ResponseEntity<>(receitaService.buscarById(id), HttpStatus.OK);
+    public ResponseEntity<ReceitaDTO> findById(@PathVariable("idReceita") @Positive Integer id) throws EntidadeNaoEncontradaException {
+        return new ResponseEntity<>(receitaService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<ReceitaDTO>> listarReceitasPorUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
-        return new ResponseEntity<>(receitaService.buscarByIdUsuario(id), HttpStatus.OK);
+    public ResponseEntity<List<ReceitaDTO>> findByUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
+        return new ResponseEntity<>(receitaService.findByUsuario(id), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<ReceitaDTO> adicionarReceita(@Valid @RequestBody ReceitaCreateDTO receita) throws RegraDeNegocioException {
-        return new ResponseEntity<>(receitaService.adicionarReceita(receita), HttpStatus.OK);
+    @PostMapping("/{idUsuario}")
+    public ResponseEntity<ReceitaDTO> create(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody ReceitaCreateDTO receita) throws RegraDeNegocioException {
+        return new ResponseEntity<>(receitaService.create(receita, idUsuario), HttpStatus.OK);
     }
 
     @PutMapping("/{idReceita}")
-    public ResponseEntity<ReceitaDTO> editarReceita(@PathVariable("idReceita") Integer id,
-                           @Valid @RequestBody ReceitaDTO receitaAtualizar) throws RegraDeNegocioException {
-        return new ResponseEntity<>(receitaService.editarReceita(id, receitaAtualizar), HttpStatus.OK);
+    public ResponseEntity<ReceitaDTO> update(@PathVariable("idReceita") Integer id,
+                                             @Valid @RequestBody ReceitaDTO receitaAtualizar){
+        return new ResponseEntity<>(receitaService.update(id, receitaAtualizar), HttpStatus.OK);
     }
 
     @DeleteMapping("/{idReceita}")
-    public ResponseEntity<Void> removerReceita(@PathVariable("idReceita") Integer id) throws RegraDeNegocioException{
-        receitaService.removerReceita(id);
+    public ResponseEntity<Void> remove(@PathVariable("idReceita") Integer id) {
+        receitaService.remove(id);
         return ResponseEntity.ok().build();
     }
 

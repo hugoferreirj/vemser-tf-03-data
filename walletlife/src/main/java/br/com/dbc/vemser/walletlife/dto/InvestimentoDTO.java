@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InvestimentoDTO extends InvestimentoCreateDTO {
-    private Integer id_investimento;
+    private Integer idInvestimento;
 }
