@@ -59,7 +59,7 @@ public interface DespesaControllerDoc {
             }
     )
     @PostMapping
-    public ResponseEntity<DespesaDTO> adicionarDespesa(@Valid @RequestBody DespesaCreateDTO despesa) throws RegraDeNegocioException;
+    public ResponseEntity<DespesaDTO> adicionarDespesa(@PathVariable("idUsuario") Integer idUsuario,@Valid @RequestBody DespesaCreateDTO despesa) throws RegraDeNegocioException;
 
     @Operation(summary = "Atualiza uma despesa por ID", description = "Busca no banco a despesa a partir de um ID e a atualiza")
     @ApiResponses(
