@@ -1,11 +1,16 @@
 package br.com.dbc.vemser.walletlife.dto;
 
 import br.com.dbc.vemser.walletlife.enumerators.TipoDespesaEReceita;
+import br.com.dbc.vemser.walletlife.modelos.Usuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -37,7 +42,8 @@ public class InvestimentoCreateDTO {
     @Schema(description = "Data de início do investimento", required = true, example = "2023-08-09")
     private LocalDate dataInicio;
 
-    @NotNull
-    @Schema(description = "ID da chave estrangeira", required = true, example = "1")
-    private int idUsuario;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private Usuario usuario;
 }
