@@ -26,16 +26,19 @@ public class ReceitaService {
     private final UsuarioService usuarioService;
 
 
-    public ReceitaDTO create(ReceitaCreateDTO receita, Integer idUsuario) throws RegraDeNegocioException {
+    public ReceitaDTO create(ReceitaCreateDTO receita, Integer idUsuario) {
         UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
-        if (usuarioById != null) {
-            Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
-            Receita entity = objectMapper.convertValue(receita, Receita.class);
-            entity.setUsuario(usuarioConvertido);
-            Receita receitaAdicionada = receitaRepository.save(entity);
-            return convertToDTO(receitaAdicionada);
-        } else {
-            throw new RegraDeNegocioException("Usuário não encontrado");
+        try{
+       if (usuarioById == null) {
+           throw new RegraDeNegocioException("Usuário não encontrado");
+       }
+        Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
+        Receita entity = objectMapper.convertValue(receita, Receita.class);
+        entity.setUsuario(usuarioConvertido);
+        Receita receitaAdicionada = receitaRepository.save(entity);
+        return convertToDTO(receitaAdicionada);
+        }catch (RegraDeNegocioException e){
+            throw new RuntimeException(e);
         }
     }
 
@@ -69,28 +72,30 @@ public class ReceitaService {
         return receitasDTO;
     }
 
-    public List<ReceitaDTO> findByUsuario(Integer idUsuario) throws RegraDeNegocioException {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
-        Usuario usuarioEntity = objectMapper.convertValue(usuarioById, Usuario.class);
-
-        if (usuarioEntity != null) {
+    public List<ReceitaDTO> findByUsuario(Integer idUsuario) {
+        try {
+            UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+            Usuario usuarioEntity = objectMapper.convertValue(usuarioById, Usuario.class);
+            if (usuarioEntity == null) {
+                throw new RegraDeNegocioException("Usuario não encontrado");
+            }
             List<Receita> receitas = receitaRepository.findByUsuario(usuarioEntity);
             List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
             return receitasDTO;
-        } else {
-            throw new RegraDeNegocioException("Usuario não encontrado");
+        } catch (RegraDeNegocioException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public ReceitaDTO findById(Integer id) throws EntidadeNaoEncontradaException {
+    public ReceitaDTO findById(Integer id) {
         return convertToDTO(returnReceitaEntityById(id));
     }
 
     public Receita returnReceitaEntityById(Integer id) {
         try {
             return receitaRepository.findById(id)
-                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Receita não encontrada"));
-        } catch (EntidadeNaoEncontradaException e) {
+                    .orElseThrow(() -> new RegraDeNegocioException("Receita não encontrada"));
+        } catch (RegraDeNegocioException e) {
             throw new RuntimeException(e);
         }
     }
