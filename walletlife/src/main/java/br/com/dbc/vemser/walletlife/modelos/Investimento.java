@@ -11,18 +11,29 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "INVESTIMENTO")
-public class Investimento extends AbstractMovimentoDinheiro{
+public class Investimento {
 
     @Id
-    //sequence
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INVESTIMENTO")
+    @SequenceGenerator(name = "SEQ_INVESTIMENTO", sequenceName = "INVESTIMENTO_SEQ", allocationSize = 1)
+    @Column(name = "id_investimento")
     private Integer idInvestimento;
+
+    @NotNull
+    @Column(name = "valor")
+    private Double valor;
+
+    @NotNull
+    @Size(min = 5, max = 30)
+    @Column(name = "descricao")
+    private String descricao;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
