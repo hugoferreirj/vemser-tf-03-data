@@ -49,9 +49,10 @@ public class UsuarioController implements UsuarioControllerDoc {
     }
 
     @GetMapping("/usuario-investimento")
-    public ResponseEntity<Set<UsuarioComInvestimentoDTO>> findUsuariosByInvestimentoCorretora(
+    public ResponseEntity<List<UsuarioComInvestimentoDTO>> findUsuariosByInvestimentoCorretora(
+            Integer pagina, Integer quantidadeRegistros,
             @RequestParam(value = "corretora", required = false) String corretora){
-        return new ResponseEntity<>(usuarioService.findUsuariosByInvestimentoCorretora(corretora), HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.findUsuariosByInvestimentoCorretora(corretora, pagina, quantidadeRegistros), HttpStatus.OK);
     }
 
     @PostMapping

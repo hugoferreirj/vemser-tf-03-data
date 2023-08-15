@@ -30,7 +30,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
         JOIN u.investimentos i
         WHERE (:corretora is null OR trim(upper(i.corretora)) = trim(upper(:corretora)))
     """)
-    Set<UsuarioComInvestimentoDTO> findUsuariosByInvestimentoCorretora(String corretora);
+    Page<UsuarioComInvestimentoDTO> findUsuariosByInvestimentoCorretora(String corretora, Pageable pageable);
 
     @Query("""
         SELECT new br.com.dbc.vemser.walletlife.dto.UsuarioComReceitaDTO

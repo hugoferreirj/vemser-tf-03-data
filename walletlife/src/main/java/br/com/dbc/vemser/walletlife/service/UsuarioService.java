@@ -117,8 +117,11 @@ public class UsuarioService {
         return usuarioComReceitaDTOS;
     }
 
-    public Set<UsuarioComInvestimentoDTO> findUsuariosByInvestimentoCorretora(String corretora){
-        return usuarioRepository.findUsuariosByInvestimentoCorretora(corretora);
+    public List<UsuarioComInvestimentoDTO> findUsuariosByInvestimentoCorretora(String corretora, Integer pagina, Integer quantidadeRegistros){
+        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
+        Page<UsuarioComInvestimentoDTO> investimento = usuarioRepository.findUsuariosByInvestimentoCorretora(corretora, pageable);
+        List<UsuarioComInvestimentoDTO> usuarioComInvestimentoDTOS = investimento.getContent();
+        return usuarioComInvestimentoDTOS;
     }
 
     private UsuarioDTO convertToDTO(Usuario usuario) {
