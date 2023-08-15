@@ -22,7 +22,7 @@ public class Investimento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INVESTIMENTO")
-    @SequenceGenerator(name = "SEQ_INVESTIMENTO", sequenceName = "INVESTIMENTO_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "SEQ_INVESTIMENTO", sequenceName = "SEQ_INVESTIMENTO", allocationSize = 1)
     @Column(name = "id_investimento")
     private Integer idInvestimento;
 

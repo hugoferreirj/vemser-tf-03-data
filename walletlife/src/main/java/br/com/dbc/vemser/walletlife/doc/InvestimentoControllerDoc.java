@@ -15,6 +15,17 @@ import java.util.List;
 
 public interface InvestimentoControllerDoc {
 
+    @Operation(summary = "Buscar todos os investimentos", description = "Busca no banco todos investimentos")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna uma lista de investimentos"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @GetMapping
+    public ResponseEntity<List<InvestimentoDTO>> findAll();
+
     @Operation(summary = "Buscar Investimento por ID", description = "Busca no banco o investimento a partir de um ID")
     @ApiResponses(
             value = {
@@ -24,7 +35,7 @@ public interface InvestimentoControllerDoc {
             }
     )
     @GetMapping("/{idInvestimento}")
-    public ResponseEntity<InvestimentoDTO> buscarInvestimento(@PathVariable("idInvestimento") @Positive Integer id);
+    public ResponseEntity<InvestimentoDTO> findById(@PathVariable("idInvestimento") @Positive Integer id);
 
     @Operation(summary = "Listar Investimentos por ID de Usuário", description = "Lista todos os investimentos de um usuário a partir de um ID de usuário")
     @ApiResponses(
@@ -35,7 +46,7 @@ public interface InvestimentoControllerDoc {
             }
     )
     @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<InvestimentoDTO>> listInvestimentosUsuario(@PathVariable("idUsuario") @Positive Integer id) throws RegraDeNegocioException;
+    public ResponseEntity<List<InvestimentoDTO>> findByUsuario(@PathVariable("idUsuario") @Positive Integer id) throws RegraDeNegocioException;
 
     @Operation(summary = "Adicionar Investimento", description = "Adiciona um novo investimento no banco")
     @ApiResponses(
@@ -46,7 +57,7 @@ public interface InvestimentoControllerDoc {
             }
     )
     @PostMapping
-    public ResponseEntity<InvestimentoDTO> create(@RequestBody @Valid InvestimentoCreateDTO investimento) throws RegraDeNegocioException;
+    public ResponseEntity<InvestimentoDTO> create(@RequestBody @Valid InvestimentoCreateDTO investimento, @PathVariable("idUsuario") @Positive Integer id) throws RegraDeNegocioException;
 
     @Operation(summary = "Atualizar Investimento por ID", description = "Busca no banco o investimento a partir de um ID e o atualiza")
     @ApiResponses(
@@ -69,5 +80,5 @@ public interface InvestimentoControllerDoc {
             }
     )
     @DeleteMapping("/{idInvestimento}")
-    public ResponseEntity<Void> delete(@PathVariable("idInvestimento") @Positive Integer id) throws Exception;
+    public ResponseEntity<Void> remove(@PathVariable("idInvestimento") @Positive Integer id) throws Exception;
 }
