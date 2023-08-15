@@ -2,12 +2,9 @@ package br.com.dbc.vemser.walletlife.service;
 
 import br.com.dbc.vemser.walletlife.dto.DespesaCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.DespesaDTO;
-import br.com.dbc.vemser.walletlife.dto.ReceitaDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioDTO;
-import br.com.dbc.vemser.walletlife.exceptions.EntidadeNaoEncontradaException;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.walletlife.modelos.Despesa;
-import br.com.dbc.vemser.walletlife.modelos.Receita;
 import br.com.dbc.vemser.walletlife.modelos.Usuario;
 import br.com.dbc.vemser.walletlife.repository.DespesaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,16 +66,17 @@ public class DespesaService {
 
     // leitura
     public List<DespesaDTO> listarDespesaByIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
-        Usuario usuarioEntity = objectMapper.convertValue(usuarioById, Usuario.class);
-
-        if (usuarioEntity != null) {
-           List<Despesa> receitas = despesaRepository.findByUsuario(usuarioEntity);
-            List<DespesaDTO> despesasDTO = this.convertToDTOList(receitas);
-            return despesasDTO;
-        } else {
-            throw new RegraDeNegocioException("Usuario não encontrado");
-        }
+//        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+//        Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
+//
+//        if (usuarioById != null) {
+//            List<Despesa> despesas = despesaRepository.findAllByIdFK(idUsuario);
+//            List<DespesaDTO> despesasDTO = this.convertToDTOList(despesas);
+//            return despesasDTO;
+//        } else {
+//            throw new RegraDeNegocioException("Usuario não encontrado");
+//        }
+        return null;
     }
 
     public List<DespesaDTO> listar() {
@@ -87,8 +85,19 @@ public class DespesaService {
         return despesaDTOS;
     }
 
-    public DespesaDTO findById(Integer id) throws EntidadeNaoEncontradaException {
-        return convertToDTO(returnDespesaEntityById(id));
+    public DespesaDTO buscarById(Integer idDespesa) throws RegraDeNegocioException {
+        try {
+            Optional<Despesa> despesaExisteOp = despesaRepository.findById(idDespesa);
+            if (despesaExisteOp.isEmpty()) {
+                throw new RegraDeNegocioException("Despesa não encontrada");
+            }
+            Despesa despesaExiste = despesaExisteOp.get();
+            DespesaDTO despesaDTO = objectMapper.convertValue(despesaExiste, DespesaDTO.class);
+            return despesaDTO;
+
+        } catch (RegraDeNegocioException e) {
+            throw new RuntimeException();
+        }
     }
 
     private DespesaDTO convertToDTO(Despesa despesa) {
@@ -99,10 +108,5 @@ public class DespesaService {
     private List<DespesaDTO> convertToDTOList(List<Despesa> listaDespesas) {
         return listaDespesas.stream()
                 .map(this::convertToDTO).collect(Collectors.toList());
-    }
-
-    public Despesa returnDespesaEntityById(Integer id) throws EntidadeNaoEncontradaException {
-        return despesaRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Receita não encontrada"));
     }
 }
