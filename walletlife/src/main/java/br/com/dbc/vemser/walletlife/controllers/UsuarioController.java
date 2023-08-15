@@ -25,15 +25,15 @@ public class UsuarioController implements UsuarioControllerDoc {
         this.usuarioService = usuarioService;
     }
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> listar(){
+    public ResponseEntity<List<UsuarioDTO>> findAll(){
         log.info("Usuário: listar todos");
-        return new ResponseEntity<>(usuarioService.listar(), HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> listarPessoasPorId(@PathVariable("idUsuario") @Positive Integer idUsuario){
+    public ResponseEntity<UsuarioDTO> findById(@PathVariable("idUsuario") @Positive Integer idUsuario){
         log.info("Usuário: listar por Id do usuário");
-        return new ResponseEntity<>(usuarioService.listarPessoasPorId(idUsuario), HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.findById(idUsuario), HttpStatus.OK);
     }
 
     @GetMapping("/usuario-despesa")
@@ -42,9 +42,10 @@ public class UsuarioController implements UsuarioControllerDoc {
     }
 
     @GetMapping("/usuario-receita")
-    public ResponseEntity<Set<UsuarioComReceitaDTO>> findallUsuarioReceita(
+    public ResponseEntity<List<UsuarioComReceitaDTO>> findallUsuarioReceita(
+            Integer pagina, Integer quantidadeRegistros,
             @RequestParam(value = "valor", required = false) Double valor){
-        return new ResponseEntity<>(usuarioService.findallUsuarioReceita(valor), HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.findAllUsuarioReceita(valor, pagina, quantidadeRegistros), HttpStatus.OK);
     }
 
     @GetMapping("/usuario-investimento")
@@ -54,23 +55,23 @@ public class UsuarioController implements UsuarioControllerDoc {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> adicionarUsuario(@RequestBody @Valid UsuarioCreateDTO usuario){
+    public ResponseEntity<UsuarioDTO> create(@RequestBody @Valid UsuarioCreateDTO usuario){
         log.info("Usuário: inserir novo");
-        return new ResponseEntity<>(usuarioService.adicionarUsuario(usuario), HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.create(usuario), HttpStatus.OK);
     }
 
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> editarPessoa(@PathVariable @Positive Integer idUsuario,
+    public ResponseEntity<UsuarioDTO> update(@PathVariable @Positive Integer idUsuario,
                                                    @RequestBody @Valid UsuarioCreateDTO usuario){
         log.info("Usuário: editar");
-        UsuarioDTO usuarioAtualizado = usuarioService.editarPessoa(idUsuario, usuario);
+        UsuarioDTO usuarioAtualizado = usuarioService.update(idUsuario, usuario);
         return new ResponseEntity<>(usuarioAtualizado, HttpStatus.OK);
     }
 
     @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Void> remover(@PathVariable Integer idUsuario){
+    public ResponseEntity<Void> remove(@PathVariable Integer idUsuario){
         log.info("Usuário: deletar por id");
-        usuarioService.removerPessoa(idUsuario);
+        usuarioService.remove(idUsuario);
         return ResponseEntity.ok().build();
     }
 

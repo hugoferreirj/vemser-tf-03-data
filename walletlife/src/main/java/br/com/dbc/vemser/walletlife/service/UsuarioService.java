@@ -7,6 +7,10 @@ import br.com.dbc.vemser.walletlife.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -23,7 +27,7 @@ public class UsuarioService {
 
 
     // criação de um objeto
-    public UsuarioDTO adicionarUsuario(UsuarioCreateDTO usuario) {
+    public UsuarioDTO create(UsuarioCreateDTO usuario) {
         try {
             Usuario usuarioConvertido = objectMapper.convertValue(usuario, Usuario.class);
             Usuario usuarioCriado = usuarioRepository.save(usuarioConvertido);
@@ -45,12 +49,12 @@ public class UsuarioService {
 //            dados.put("email", novoUsuario.getEmail());
 //            emailService.sendTemplateEmail(dados);
 
-    public void removerPessoa(Integer id) {
+    public void remove(Integer id) {
         usuarioRepository.deleteById(id);
     }
 
     // atualização de um objeto
-    public UsuarioDTO editarPessoa(Integer id, UsuarioCreateDTO usuario) {
+    public UsuarioDTO update(Integer id, UsuarioCreateDTO usuario) {
         try {
             Optional<Usuario> usuarioExisteOp = usuarioRepository.findById(id);
             if (usuarioExisteOp.isEmpty()) {
@@ -79,7 +83,7 @@ public class UsuarioService {
 //            dados.put("email", usuarioDTO.getEmail());
 //            emailService.sendTemplateEmail(dados);
 
-    public UsuarioDTO listarPessoasPorId(Integer id) {
+    public UsuarioDTO findById(Integer id) {
         try {
             Optional<Usuario> usuarioExisteOp = usuarioRepository.findById(id);
             if (usuarioExisteOp.isEmpty()) {
@@ -94,7 +98,7 @@ public class UsuarioService {
         }
     }
 
-    public List<UsuarioDTO> listar() {
+    public List<UsuarioDTO> findAll() {
         List<UsuarioDTO> usuarios = usuarioRepository.findAll().stream()
                 .map(
                         usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class)
@@ -106,8 +110,11 @@ public class UsuarioService {
         return usuarioRepository.findAllUsuariosDespesa();
     }
 
-    public Set<UsuarioComReceitaDTO> findallUsuarioReceita(Double valor){
-        return usuarioRepository.findallUsuarioReceita(valor);
+    public List<UsuarioComReceitaDTO> findAllUsuarioReceita(Double valor, Integer pagina, Integer quantidadeRegistros){
+        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
+        Page<UsuarioComReceitaDTO> receitas = usuarioRepository.findallUsuarioReceita(valor, pageable);
+        List<UsuarioComReceitaDTO> usuarioComReceitaDTOS = receitas.getContent();
+        return usuarioComReceitaDTOS;
     }
 
     public Set<UsuarioComInvestimentoDTO> findUsuariosByInvestimentoCorretora(String corretora){

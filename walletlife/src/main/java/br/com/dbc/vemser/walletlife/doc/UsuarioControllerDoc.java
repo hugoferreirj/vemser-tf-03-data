@@ -24,7 +24,7 @@ public interface UsuarioControllerDoc {
     )
 
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> listar();
+    public ResponseEntity<List<UsuarioDTO>> findAll();
 
     @Operation(summary = "Listar Usuários por ID", description = "Busca no banco o usuário a partir de um ID")
     @ApiResponses(
@@ -35,7 +35,7 @@ public interface UsuarioControllerDoc {
             }
     )
     @GetMapping("/{idPessoa}")
-    public ResponseEntity<UsuarioDTO> listarPessoasPorId(@PathVariable("idPessoa") @Positive Integer idPessoa);
+    public ResponseEntity<UsuarioDTO> findById(@PathVariable("idPessoa") @Positive Integer idPessoa);
 
 
     @Operation(summary = "Insere um novo usuário", description = "Insere um novo usuário no banco")
@@ -47,7 +47,7 @@ public interface UsuarioControllerDoc {
             }
     )
     @PostMapping
-    public ResponseEntity<UsuarioDTO> adicionarUsuario(@RequestBody @Valid UsuarioCreateDTO usuario);
+    public ResponseEntity<UsuarioDTO> create(@RequestBody @Valid UsuarioCreateDTO usuario);
 
 
     @Operation(summary = "Atualiza um Usuário por ID", description = "Busca no banco o usuário a partir de um ID e o atualiza")
@@ -59,7 +59,7 @@ public interface UsuarioControllerDoc {
             }
     )
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> editarPessoa(@PathVariable @Positive Integer idUsuario,
+    public ResponseEntity<UsuarioDTO> update(@PathVariable @Positive Integer idUsuario,
                                                    @RequestBody @Valid UsuarioCreateDTO usuario);
 
     @Operation(summary = "Deleta um Usuário por ID", description = "Busca no banco o usuário a partir de um ID e o deleta")
@@ -71,5 +71,5 @@ public interface UsuarioControllerDoc {
             }
     )
     @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Void> remover(@PathVariable Integer idUsuario);
+    public ResponseEntity<Void> remove(@PathVariable Integer idUsuario);
 }

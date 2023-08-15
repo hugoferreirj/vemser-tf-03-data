@@ -28,7 +28,7 @@ public class DespesaService {
     private final UsuarioService usuarioService;
 
     public DespesaDTO adicionarDespesa(DespesaCreateDTO despesa,Integer idUsuario) throws RegraDeNegocioException {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+        UsuarioDTO usuarioById = usuarioService.findById(idUsuario);
         if (usuarioById != null) {
             Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
             Despesa entity = objectMapper.convertValue(despesa, Despesa.class);
@@ -68,7 +68,7 @@ public class DespesaService {
 
     // leitura
     public List<DespesaDTO> listarDespesaByIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+        UsuarioDTO usuarioById = usuarioService.findById(idUsuario);
         Usuario usuarioEntity = objectMapper.convertValue(usuarioById, Usuario.class);
 
         if (usuarioEntity != null) {
