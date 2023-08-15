@@ -3,6 +3,7 @@ package br.com.dbc.vemser.walletlife.controllers;
 import br.com.dbc.vemser.walletlife.doc.DespesaControllerDoc;
 import br.com.dbc.vemser.walletlife.dto.DespesaCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.DespesaDTO;
+import br.com.dbc.vemser.walletlife.exceptions.EntidadeNaoEncontradaException;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.walletlife.service.DespesaService;
 import lombok.Data;
@@ -22,6 +23,7 @@ import java.util.List;
 @Slf4j
 @Data
 public class DespesaController implements DespesaControllerDoc {
+
     private final DespesaService despesaService;
 
     @GetMapping
@@ -30,8 +32,8 @@ public class DespesaController implements DespesaControllerDoc {
     }
 
     @GetMapping("/{idDespesa}")
-    public ResponseEntity<DespesaDTO> buscarDespesas(@PathVariable("idDespesa") Integer id) throws RegraDeNegocioException {
-        return new ResponseEntity<>(despesaService.buscarById(id), HttpStatus.OK);
+    public ResponseEntity<DespesaDTO> buscarDespesas(@PathVariable("idDespesa") Integer id) throws RegraDeNegocioException, EntidadeNaoEncontradaException {
+        return new ResponseEntity<>(despesaService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("/usuario/{idUsuario}")
