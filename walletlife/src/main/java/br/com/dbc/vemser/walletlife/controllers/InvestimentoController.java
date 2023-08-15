@@ -31,7 +31,7 @@ public class InvestimentoController implements InvestimentoControllerDoc {
         return ResponseEntity.ok(investimentoDTO);
     }
     @GetMapping("/{idInvestimento}")
-    public ResponseEntity<InvestimentoDTO> findById(@PathVariable("idInvestimento") @Positive Integer id) {
+    public ResponseEntity<InvestimentoDTO> findById(@PathVariable("idInvestimento") @Positive Integer id) throws RegraDeNegocioException {
         InvestimentoDTO investimentoDTO = investimentoService.findById(id);
         return ResponseEntity.ok(investimentoDTO);
     }

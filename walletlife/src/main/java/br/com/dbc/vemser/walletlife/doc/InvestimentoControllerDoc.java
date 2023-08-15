@@ -35,7 +35,7 @@ public interface InvestimentoControllerDoc {
             }
     )
     @GetMapping("/{idInvestimento}")
-    public ResponseEntity<InvestimentoDTO> findById(@PathVariable("idInvestimento") @Positive Integer id);
+    public ResponseEntity<InvestimentoDTO> findById(@PathVariable("idInvestimento") @Positive Integer id) throws RegraDeNegocioException;
 
     @Operation(summary = "Listar Investimentos por ID de Usuário", description = "Lista todos os investimentos de um usuário a partir de um ID de usuário")
     @ApiResponses(
