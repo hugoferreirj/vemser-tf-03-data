@@ -18,7 +18,7 @@ public class UsuarioCreateDTO {
     @NotNull
     @Size(min = 2, max = 255)
     @Schema(description = "Nome da Pessoa", required = true, example = "Monkey D. Luffy")
-    private String nomeCompleto;
+    private String nome;
 
     @NotNull
     @PastOrPresent

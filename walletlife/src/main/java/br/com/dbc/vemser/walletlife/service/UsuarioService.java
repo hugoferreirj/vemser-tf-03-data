@@ -1,5 +1,7 @@
 package br.com.dbc.vemser.walletlife.service;
 
+import br.com.dbc.vemser.walletlife.dto.UsuarioComDespesaDTO;
+import br.com.dbc.vemser.walletlife.dto.UsuarioComReceitaDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioDTO;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
@@ -11,10 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -104,6 +103,14 @@ public class UsuarioService {
                         usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class)
                 ).collect(Collectors.toList());
         return usuarios;
+    }
+
+    public Set<UsuarioComDespesaDTO> findAllUsuariosDespesa(){
+        return usuarioRepository.findAllUsuariosDespesa();
+    }
+
+    public Set<UsuarioComReceitaDTO> findallUsuarioReceita(Double valor){
+        return usuarioRepository.findallUsuarioReceita(valor);
     }
 
     private UsuarioDTO convertToDTO(Usuario usuario) {

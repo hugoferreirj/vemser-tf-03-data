@@ -23,7 +23,7 @@ public class Usuario {
     private Integer idUsuario;
 
     @Column(name = "NOME")
-    private String nomeCompleto;
+    private String nome;
 
     @Column(name = "DATANASCIMENTO")
     private LocalDate dataNascimento;
