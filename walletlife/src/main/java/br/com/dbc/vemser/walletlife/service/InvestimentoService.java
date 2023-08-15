@@ -39,7 +39,6 @@ public class InvestimentoService {
     }
 
     public void remove(Integer id) {
-
         investimentoRepository.deleteById(id);
     }
 
@@ -63,18 +62,15 @@ public class InvestimentoService {
         }
     }
 
-    public InvestimentoDTO findById(Integer idInvestimento) {
-        try {
-            Investimento investimento = investimentoRepository.findById(idInvestimento).get();
-            InvestimentoDTO investimentoDTO = convertToDTO(investimento);
-            if (investimento.getIdInvestimento() == null){
-                throw new RegraDeNegocioException("Investimento não encontrado");
-            }
-
-            return investimentoDTO;
-        } catch (RegraDeNegocioException e) {
-            throw new RuntimeException(e);
+    public InvestimentoDTO findById(Integer idInvestimento) throws RegraDeNegocioException {
+        Optional<Investimento> investimento = investimentoRepository.findById(idInvestimento);
+        if (investimento.isEmpty()){
+            throw new RegraDeNegocioException("Investimento não encontrado");
         }
+        Investimento investimentoExistente = investimento.get();
+        InvestimentoDTO investimentoDTO = convertToDTO(investimentoExistente);
+
+        return investimentoDTO;
     }
 
     public List<InvestimentoDTO> findAll() {
