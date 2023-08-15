@@ -27,14 +27,11 @@ public class ReceitaService {
 
 
     public ReceitaDTO create(ReceitaCreateDTO receita, Integer idUsuario) throws RegraDeNegocioException {
-        System.out.println("ENTROU AQUI");
         UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
         if (usuarioById != null) {
             Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
             Receita entity = objectMapper.convertValue(receita, Receita.class);
             entity.setUsuario(usuarioConvertido);
-            System.out.println(entity.toString());
-            System.out.println("Testee");
             Receita receitaAdicionada = receitaRepository.save(entity);
             return convertToDTO(receitaAdicionada);
         } else {
@@ -43,12 +40,7 @@ public class ReceitaService {
     }
 
     public void remove(Integer idReceita) {
-        Receita receita = null;
-        try {
-            receita = returnReceitaEntityById(idReceita);
-        } catch (EntidadeNaoEncontradaException e) {
-            e.printStackTrace();
-        }
+        Receita receita = returnReceitaEntityById(idReceita);
         receitaRepository.delete(receita);
     }
 
@@ -72,7 +64,6 @@ public class ReceitaService {
     }
 
     public List<ReceitaDTO> findAll() {
-        System.out.println("IMRPESSAO");
         List<Receita> receitas = receitaRepository.findAll();
         List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
         return receitasDTO;
@@ -95,9 +86,13 @@ public class ReceitaService {
         return convertToDTO(returnReceitaEntityById(id));
     }
 
-    public Receita returnReceitaEntityById(Integer id) throws EntidadeNaoEncontradaException {
-        return receitaRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Receita não encontrada"));
+    public Receita returnReceitaEntityById(Integer id) {
+        try {
+            return receitaRepository.findById(id)
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Receita não encontrada"));
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private ReceitaDTO convertToDTO(Receita receita) {
