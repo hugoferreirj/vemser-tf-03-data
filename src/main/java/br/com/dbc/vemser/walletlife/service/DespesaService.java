@@ -27,18 +27,17 @@ public class DespesaService {
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
 
-    public DespesaDTO adicionarDespesa(DespesaCreateDTO despesa) throws RegraDeNegocioException {
-        try {
-            Despesa despesaConvertida = objectMapper.convertValue(despesa, Despesa.class);
-            Despesa despesaCriada = despesaRepository.save(despesaConvertida);
-            DespesaDTO novaDespesa = this.convertToDTO(despesaCriada);
-
-            return novaDespesa;
-        } catch (Exception e) {
-            System.err.println("ERRO: " + e.getMessage());
+    public DespesaDTO adicionarDespesa(DespesaCreateDTO despesa,Integer idUsuario) throws RegraDeNegocioException {
+        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+        if (usuarioById != null) {
+            Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
+            Despesa entity = objectMapper.convertValue(despesa, Despesa.class);
+            entity.setUsuario(usuarioConvertido);
+            Despesa despesaAdicionada = despesaRepository.save(entity);
+            return convertToDTO(despesaAdicionada);
+        } else {
+            throw new RegraDeNegocioException("Usuário não encontrado");
         }
-        return null;
-
     }
 
     // remoção
@@ -73,7 +72,7 @@ public class DespesaService {
         Usuario usuarioEntity = objectMapper.convertValue(usuarioById, Usuario.class);
 
         if (usuarioEntity != null) {
-           List<Despesa> receitas = despesaRepository.findByUsuario(usuarioEntity);
+            List<Despesa> receitas = despesaRepository.findByUsuario(usuarioEntity);
             List<DespesaDTO> despesasDTO = this.convertToDTOList(receitas);
             return despesasDTO;
         } else {
