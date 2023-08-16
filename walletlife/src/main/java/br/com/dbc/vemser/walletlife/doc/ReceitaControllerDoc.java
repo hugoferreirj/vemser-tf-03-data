@@ -2,8 +2,6 @@ package br.com.dbc.vemser.walletlife.doc;
 
 import br.com.dbc.vemser.walletlife.dto.ReceitaCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.ReceitaDTO;
-import br.com.dbc.vemser.walletlife.exceptions.EntidadeNaoEncontradaException;
-import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,7 +22,7 @@ public interface ReceitaControllerDoc {
             }
     )
     @GetMapping
-    public ResponseEntity<List<ReceitaDTO>> findAll();
+    public ResponseEntity<List<ReceitaDTO>> findAll(Integer pagina, Integer quantidadeRegistros);
 
     @Operation(summary = "Buscar receita no banco", description = "Busca no banco a receita a partir de um ID")
     @ApiResponses(
@@ -35,7 +33,7 @@ public interface ReceitaControllerDoc {
             }
     )
     @GetMapping("/{idReceita}")
-    public ResponseEntity<ReceitaDTO> findById(@PathVariable("idReceita") @Positive Integer id) throws RegraDeNegocioException, EntidadeNaoEncontradaException;
+    public ResponseEntity<ReceitaDTO> findById(@PathVariable("idReceita") @Positive Integer id);
 
     @Operation(summary = "Listar receitas de um usuário", description = "Busca no banco as receitas de um usuário utilizando o ID do usuário")
     @ApiResponses(
@@ -46,7 +44,7 @@ public interface ReceitaControllerDoc {
             }
     )
     @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<ReceitaDTO>> findByUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException;
+    public ResponseEntity<List<ReceitaDTO>> findByUsuario(@PathVariable("idUsuario") Integer id);
 
     @Operation(summary = "Insere uma nova receita", description = "Insere uma nova receita no banco")
     @ApiResponses(
@@ -57,7 +55,7 @@ public interface ReceitaControllerDoc {
             }
     )
     @PostMapping("/{idUsuario}")
-    public ResponseEntity<ReceitaDTO> create(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody ReceitaCreateDTO receita) throws RegraDeNegocioException;
+    public ResponseEntity<ReceitaDTO> create(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody ReceitaCreateDTO receita);
 
 
     @Operation(summary = "Atualiza uma receita por ID", description = "Busca no banco a receita a partir de um ID e a atualiza")
