@@ -59,7 +59,8 @@ public class UsuarioController implements UsuarioControllerDoc {
 
     @GetMapping("/usuario-dados")
     public ResponseEntity<List<UsuarioDadosDTO>> findUsuarioDados(
-            @RequestParam(value = "idUsuario", required = false) Integer idUsuario, Integer pagina, Integer quantidadeRegistros) throws RegraDeNegocioException {
+            @RequestParam(value = "idUsuario", required = false) Integer idUsuario, Integer pagina,
+            Integer quantidadeRegistros) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.findUsuarioDados(idUsuario, pagina, quantidadeRegistros), HttpStatus.OK);
     }
 
