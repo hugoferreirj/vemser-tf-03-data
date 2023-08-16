@@ -26,7 +26,7 @@ public class InvestimentoService {
     private final ObjectMapper objectMapper;
 
     public InvestimentoDTO create(InvestimentoCreateDTO investimento,  Integer idUsuario) throws RegraDeNegocioException {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+        UsuarioDTO usuarioById = usuarioService.findById(idUsuario);
         if (usuarioById != null) {
             Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
             Investimento entity = objectMapper.convertValue(investimento, Investimento.class);
@@ -80,7 +80,7 @@ public class InvestimentoService {
     }
 
     public List<InvestimentoDTO> findByUsuario(Integer idUsuario) throws RegraDeNegocioException   {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+        UsuarioDTO usuarioById = usuarioService.findById(idUsuario);
         Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
 
         if (usuarioById != null){

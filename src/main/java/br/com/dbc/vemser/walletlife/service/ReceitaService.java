@@ -30,7 +30,7 @@ public class ReceitaService {
 
 
     public ReceitaDTO create(ReceitaCreateDTO receita, Integer idUsuario) {
-        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+        UsuarioDTO usuarioById = usuarioService.findById(idUsuario);
         try{
        if (usuarioById == null) {
            throw new RegraDeNegocioException("Usuário não encontrado");
@@ -78,7 +78,7 @@ public class ReceitaService {
 
     public List<ReceitaDTO> findByUsuario(Integer idUsuario) {
         try {
-            UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+            UsuarioDTO usuarioById = usuarioService.findById(idUsuario);
             Usuario usuarioEntity = objectMapper.convertValue(usuarioById, Usuario.class);
             if (usuarioEntity == null) {
                 throw new RegraDeNegocioException("Usuario não encontrado");

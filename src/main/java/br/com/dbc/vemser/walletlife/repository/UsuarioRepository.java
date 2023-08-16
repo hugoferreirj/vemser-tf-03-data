@@ -3,7 +3,10 @@ package br.com.dbc.vemser.walletlife.repository;
 import br.com.dbc.vemser.walletlife.dto.UsuarioComDespesaDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioComInvestimentoDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioComReceitaDTO;
+import br.com.dbc.vemser.walletlife.dto.UsuarioDadosDTO;
 import br.com.dbc.vemser.walletlife.modelos.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,7 +31,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
         JOIN u.investimentos i
         WHERE (:corretora is null OR trim(upper(i.corretora)) = trim(upper(:corretora)))
     """)
-    Set<UsuarioComInvestimentoDTO> findUsuariosByInvestimentoCorretora(String corretora);
+    Page<UsuarioComInvestimentoDTO> findUsuariosByInvestimentoCorretora(String corretora, Pageable pageable);
 
     @Query("""
         SELECT new br.com.dbc.vemser.walletlife.dto.UsuarioComReceitaDTO
@@ -37,5 +40,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
         JOIN u.receitas r
         WHERE (:valor is null or r.valor > :valor)
     """)
-    Set<UsuarioComReceitaDTO> findallUsuarioReceita(@Param("valor") Double valor);
+    Page<UsuarioComReceitaDTO> findallUsuarioReceita(@Param("valor") Double valor, Pageable pageable);
+
+
+    @Query("Select u From Usuario u where (:idUsuario is null or u.idUsuario = :idUsuario)")
+    Page<Usuario> findAllComOptional(@Param("idUsuario") Integer idUsuario, Pageable pageable);
 }
