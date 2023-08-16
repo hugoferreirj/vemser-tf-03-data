@@ -46,7 +46,7 @@ public class DespesaService {
     }
 
     // atualização de um objeto
-    public DespesaDTO editarDespesa(Integer id, DespesaCreateDTO despesa) throws RegraDeNegocioException {
+    public DespesaDTO editarDespesa(Integer id, DespesaDTO despesa) throws RegraDeNegocioException {
         try {
             Optional<Despesa> despesaExiteOp = despesaRepository.findById(id);
             if (despesaExiteOp.isEmpty()){
@@ -58,9 +58,8 @@ public class DespesaService {
             BeanUtils.copyProperties(despesaDados,despesaExiste, "idDespesa");
 
             Despesa despesaAtualizada = despesaRepository.save(despesaExiste);
-            DespesaDTO despesaDTO = objectMapper.convertValue(despesaAtualizada,DespesaDTO.class);
 
-            return despesaDTO;
+            return convertToDTO(despesaAtualizada);
         } catch (RegraDeNegocioException e){
             throw new RuntimeException(e);
         }

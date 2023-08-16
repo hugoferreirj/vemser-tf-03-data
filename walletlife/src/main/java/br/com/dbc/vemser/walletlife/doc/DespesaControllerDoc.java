@@ -71,7 +71,7 @@ public interface DespesaControllerDoc {
     )
     @PutMapping("/{idDespesa}")
     public ResponseEntity<DespesaDTO> editarDepesa(@PathVariable("idDespesa") Integer id,
-                                                   @Valid @RequestBody DespesaCreateDTO despesaAtualizar) throws RegraDeNegocioException;
+                                                   @Valid @RequestBody DespesaDTO despesaAtualizar) throws RegraDeNegocioException;
 
     @Operation(summary = "Deleta uma despesa por ID", description = "Busca no banco a despesa a partir de um ID e a deleta")
     @ApiResponses(
