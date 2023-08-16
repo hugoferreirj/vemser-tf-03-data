@@ -3,8 +3,6 @@ package br.com.dbc.vemser.walletlife.controllers;
 import br.com.dbc.vemser.walletlife.doc.ReceitaControllerDoc;
 import br.com.dbc.vemser.walletlife.dto.ReceitaCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.ReceitaDTO;
-import br.com.dbc.vemser.walletlife.exceptions.EntidadeNaoEncontradaException;
-import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.walletlife.service.ReceitaService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -24,22 +22,22 @@ public class ReceitaController implements ReceitaControllerDoc {
     private final ReceitaService receitaService;
 
     @GetMapping
-    public ResponseEntity<List<ReceitaDTO>> findAll() {
-        return new ResponseEntity<>(receitaService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<ReceitaDTO>> findAll(Integer pagina, Integer quantidadeRegistros) {
+        return new ResponseEntity<>(receitaService.findAll(pagina, quantidadeRegistros), HttpStatus.OK);
     }
 
     @GetMapping("/{idReceita}")
-    public ResponseEntity<ReceitaDTO> findById(@PathVariable("idReceita") @Positive Integer id) throws EntidadeNaoEncontradaException {
+    public ResponseEntity<ReceitaDTO> findById(@PathVariable("idReceita") @Positive Integer id){
         return new ResponseEntity<>(receitaService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<ReceitaDTO>> findByUsuario(@PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
+    public ResponseEntity<List<ReceitaDTO>> findByUsuario(@PathVariable("idUsuario") Integer id){
         return new ResponseEntity<>(receitaService.findByUsuario(id), HttpStatus.OK);
     }
 
     @PostMapping("/{idUsuario}")
-    public ResponseEntity<ReceitaDTO> create(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody ReceitaCreateDTO receita) throws RegraDeNegocioException {
+    public ResponseEntity<ReceitaDTO> create(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody ReceitaCreateDTO receita){
         return new ResponseEntity<>(receitaService.create(receita, idUsuario), HttpStatus.OK);
     }
 

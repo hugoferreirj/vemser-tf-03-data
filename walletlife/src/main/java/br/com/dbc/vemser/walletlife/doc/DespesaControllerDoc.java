@@ -2,6 +2,7 @@ package br.com.dbc.vemser.walletlife.doc;
 
 import br.com.dbc.vemser.walletlife.dto.DespesaCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.DespesaDTO;
+import br.com.dbc.vemser.walletlife.exceptions.EntidadeNaoEncontradaException;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,7 +36,7 @@ public interface DespesaControllerDoc {
             }
     )
     @GetMapping("/{idDespesa}") //GET localhost:8080/despesa/1
-    public ResponseEntity<DespesaDTO> buscarDespesas(@PathVariable("idDespesa") Integer id) throws RegraDeNegocioException;
+    public ResponseEntity<DespesaDTO> buscarDespesas(@PathVariable("idDespesa") Integer id) throws RegraDeNegocioException, EntidadeNaoEncontradaException;
 
     @Operation(summary = "Listar despesas de um usuário", description = "Busca no banco as despesas de um usuário utilizando o ID do usuário")
     @ApiResponses(
@@ -58,7 +59,7 @@ public interface DespesaControllerDoc {
             }
     )
     @PostMapping
-    public ResponseEntity<DespesaDTO> adicionarDespesa(@Valid @RequestBody DespesaCreateDTO despesa) throws RegraDeNegocioException;
+    public ResponseEntity<DespesaDTO> adicionarDespesa(@PathVariable("idUsuario") Integer idUsuario,@Valid @RequestBody DespesaCreateDTO despesa) throws RegraDeNegocioException;
 
     @Operation(summary = "Atualiza uma despesa por ID", description = "Busca no banco a despesa a partir de um ID e a atualiza")
     @ApiResponses(
