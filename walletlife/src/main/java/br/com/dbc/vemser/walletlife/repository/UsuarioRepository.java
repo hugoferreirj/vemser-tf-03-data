@@ -3,6 +3,7 @@ package br.com.dbc.vemser.walletlife.repository;
 import br.com.dbc.vemser.walletlife.dto.UsuarioComDespesaDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioComInvestimentoDTO;
 import br.com.dbc.vemser.walletlife.dto.UsuarioComReceitaDTO;
+import br.com.dbc.vemser.walletlife.dto.UsuarioDadosDTO;
 import br.com.dbc.vemser.walletlife.modelos.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,4 +41,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
         WHERE (:valor is null or r.valor > :valor)
     """)
     Page<UsuarioComReceitaDTO> findallUsuarioReceita(@Param("valor") Double valor, Pageable pageable);
+
+
+    @Query("Select u From Usuario u where (:idUsuario is null or u.idUsuario = :idUsuario)")
+    Page<Usuario> findAllComOptional(@Param("idUsuario") Integer idUsuario, Pageable pageable);
 }

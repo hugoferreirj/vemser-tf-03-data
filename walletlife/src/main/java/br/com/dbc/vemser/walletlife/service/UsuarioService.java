@@ -124,6 +124,22 @@ public class UsuarioService {
         return usuarioComInvestimentoDTOS;
     }
 
+    public List<UsuarioDadosDTO> findUsuarioDados(Integer idUsuario, Integer pagina, Integer quantidadeRegistros) throws RegraDeNegocioException {
+        if (idUsuario != null){
+            Optional<Usuario> usuarioOP = usuarioRepository.findById(idUsuario);
+            if (usuarioOP.isEmpty()){
+                throw new RegraDeNegocioException("Usuário não encontrado");
+            }
+        }
+        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
+        Page<Usuario> dados = usuarioRepository.findAllComOptional(idUsuario, pageable);
+        List<Usuario> usuarioDadosDTOS = dados.getContent();
+
+        return usuarioDadosDTOS.stream().map(
+                usuario -> new UsuarioDadosDTO(usuario)
+        ).collect(Collectors.toList());
+    }
+
     private UsuarioDTO convertToDTO(Usuario usuario) {
         UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
         return usuarioDTO;
