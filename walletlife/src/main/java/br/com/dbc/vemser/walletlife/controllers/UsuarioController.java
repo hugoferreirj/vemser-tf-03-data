@@ -3,8 +3,10 @@ package br.com.dbc.vemser.walletlife.controllers;
 import br.com.dbc.vemser.walletlife.doc.UsuarioControllerDoc;
 import br.com.dbc.vemser.walletlife.dto.*;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.walletlife.modelos.Usuario;
 import br.com.dbc.vemser.walletlife.service.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -44,21 +46,21 @@ public class UsuarioController implements UsuarioControllerDoc {
     }
 
     @GetMapping("/usuario-receita")
-    public ResponseEntity<List<UsuarioComReceitaDTO>> findallUsuarioReceita(
+    public ResponseEntity<Page<UsuarioComReceitaDTO>> findallUsuarioReceita(
             Integer pagina, Integer quantidadeRegistros,
             @RequestParam(value = "valor", required = false) Double valor) {
         return new ResponseEntity<>(usuarioService.findAllUsuarioReceita(valor, pagina, quantidadeRegistros), HttpStatus.OK);
     }
 
     @GetMapping("/usuario-investimento")
-    public ResponseEntity<List<UsuarioComInvestimentoDTO>> findUsuariosByInvestimentoCorretora(
+    public ResponseEntity<Page<UsuarioComInvestimentoDTO>> findUsuariosByInvestimentoCorretora(
             Integer pagina, Integer quantidadeRegistros,
             @RequestParam(value = "corretora", required = false) String corretora) {
         return new ResponseEntity<>(usuarioService.findUsuariosByInvestimentoCorretora(corretora, pagina, quantidadeRegistros), HttpStatus.OK);
     }
 
     @GetMapping("/usuario-dados")
-    public ResponseEntity<List<UsuarioDadosDTO>> findUsuarioDados(
+    public ResponseEntity<Page<UsuarioDadosDTO>> findUsuarioDados(
             @RequestParam(value = "idUsuario", required = false) Integer idUsuario, Integer pagina,
             Integer quantidadeRegistros) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.findUsuarioDados(idUsuario, pagina, quantidadeRegistros), HttpStatus.OK);

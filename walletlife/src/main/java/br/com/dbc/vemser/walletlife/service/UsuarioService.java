@@ -110,21 +110,20 @@ public class UsuarioService {
         return usuarioRepository.findAllUsuariosDespesa();
     }
 
-    public List<UsuarioComReceitaDTO> findAllUsuarioReceita(Double valor, Integer pagina, Integer quantidadeRegistros){
+    public Page<UsuarioComReceitaDTO> findAllUsuarioReceita(Double valor, Integer pagina, Integer quantidadeRegistros){
         Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
         Page<UsuarioComReceitaDTO> receitas = usuarioRepository.findallUsuarioReceita(valor, pageable);
-        List<UsuarioComReceitaDTO> usuarioComReceitaDTOS = receitas.getContent();
-        return usuarioComReceitaDTOS;
+        return receitas;
     }
 
-    public List<UsuarioComInvestimentoDTO> findUsuariosByInvestimentoCorretora(String corretora, Integer pagina, Integer quantidadeRegistros){
+    public Page<UsuarioComInvestimentoDTO> findUsuariosByInvestimentoCorretora(String corretora, Integer pagina, Integer quantidadeRegistros){
         Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
         Page<UsuarioComInvestimentoDTO> investimento = usuarioRepository.findUsuariosByInvestimentoCorretora(corretora, pageable);
-        List<UsuarioComInvestimentoDTO> usuarioComInvestimentoDTOS = investimento.getContent();
-        return usuarioComInvestimentoDTOS;
+
+        return investimento;
     }
 
-    public List<UsuarioDadosDTO> findUsuarioDados(Integer idUsuario, Integer pagina, Integer quantidadeRegistros) throws RegraDeNegocioException {
+    public Page<UsuarioDadosDTO> findUsuarioDados(Integer idUsuario, Integer pagina, Integer quantidadeRegistros) throws RegraDeNegocioException {
         if (idUsuario != null){
             Optional<Usuario> usuarioOP = usuarioRepository.findById(idUsuario);
             if (usuarioOP.isEmpty()){
@@ -132,12 +131,9 @@ public class UsuarioService {
             }
         }
         Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
-        Page<Usuario> dados = usuarioRepository.findAllComOptional(idUsuario, pageable);
-        List<Usuario> usuarioDadosDTOS = dados.getContent();
+        Page<UsuarioDadosDTO> dados = usuarioRepository.findAllComOptional(idUsuario, pageable);
 
-        return usuarioDadosDTOS.stream().map(
-                usuario -> new UsuarioDadosDTO(usuario)
-        ).collect(Collectors.toList());
+        return dados;
     }
 
     private UsuarioDTO convertToDTO(Usuario usuario) {
