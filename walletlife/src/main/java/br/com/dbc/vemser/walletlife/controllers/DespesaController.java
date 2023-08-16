@@ -48,7 +48,7 @@ public class DespesaController implements DespesaControllerDoc {
 
     @PutMapping("/{idDespesa}")
     public ResponseEntity<DespesaDTO> editarDepesa(@PathVariable("idDespesa") Integer id,
-                                                   @Valid @RequestBody DespesaCreateDTO despesaAtualizar) throws RegraDeNegocioException {
+                                                   @Valid @RequestBody DespesaDTO despesaAtualizar) throws RegraDeNegocioException {
         return new ResponseEntity<>(despesaService.editarDespesa(id, despesaAtualizar), HttpStatus.OK);
     }
 
