@@ -1,16 +1,12 @@
 # Wallet Life - Sistema de Gestão Financeira (Equipe-05)
 
-Wallet Life é um  projeto desenvolvido em Java pelos colaboradores Hugo Ferreira, Kirmct de Abreu, Diogo Bruno Marques e Vinicius Santos. O sistema tem o objetivo de fazer o gerenciamento financeiro de uma pessoa. O projeto foi um desafio proposto como teste do conhecimento obtido ao final do módulo-03 com Spring Data e Banco de Dados do programa Vem Ser, da empresa DBC Company.
+Wallet Life é um  projeto desenvolvido em Java pelos colaboradores Hugo Ferreira, Kirmct de Abreu, Letícia Santos e Vinicius Santos. O sistema tem o objetivo de fazer o gerenciamento financeiro de uma pessoa. O projeto foi um desafio proposto como teste do conhecimento obtido ao final do módulo-03 com Spring Web e Banco de Dados com JDBC do programa Vem Ser, da empresa DBC Company.
 ## Funcionalidades
 
 O sistema Wallet Life oferece as seguintes funcionalidades:
 
 1. CRUD de Usuários: 
    - Listar usuários cadastrados
-   - Listar usuários com suas despesas, receitas e investimentos
-   - Listar usuários com suas despesas
-   - Listar usuários com suas seus investimentos pelo nome da corretora
-   - Listar usuários com suas receitas a partir de um valor mínimo
    - Cadastrar novo usuários
    - Buscar usuários por ID
    - Atualizar informações de um usuário existente
@@ -52,7 +48,7 @@ Para executar o projeto Wallet Life, siga os passos abaixo:
 
 ## Contribuição
 
-O projeto Wallet Life é um trabalho em equipe desenvolvido por Hugo Ferreira, Kirmct de Abreu, Diogo Bruno Marques e Vinicius Santos (Equipe-05).
+O projeto Wallet Life é um trabalho em equipe desenvolvido por Hugo Ferreira, Kirmct de Abreu, Letícia Santos e Vinicius Santos (Equipe-05).
 
 ## Licença
 
@@ -64,6 +60,6 @@ Se tiver alguma dúvida ou sugestão sobre o projeto WB Health, você pode entra
 
 - Hugo Vieira: hugo.vieira@dbccompany.com.br
 - Kirmct de Abreu: kirmct.neto@dbccompany.com.br
-- Diogo Bruno Marques: diogo.neves@dbccompany.com.br
+- Letícia Santos: leticia.goncalves@dbccompany.com.br
 - Vinícius Santos: vinicius.santos@dbccomany.com.br
 

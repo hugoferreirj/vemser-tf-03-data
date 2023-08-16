@@ -11,9 +11,6 @@ import br.com.dbc.vemser.walletlife.repository.ReceitaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,19 +26,16 @@ public class ReceitaService {
     private final UsuarioService usuarioService;
 
 
-    public ReceitaDTO create(ReceitaCreateDTO receita, Integer idUsuario) {
+    public ReceitaDTO create(ReceitaCreateDTO receita, Integer idUsuario) throws RegraDeNegocioException {
         UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
-        try{
-       if (usuarioById == null) {
-           throw new RegraDeNegocioException("Usuário não encontrado");
-       }
-        Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
-        Receita entity = objectMapper.convertValue(receita, Receita.class);
-        entity.setUsuario(usuarioConvertido);
-        Receita receitaAdicionada = receitaRepository.save(entity);
-        return convertToDTO(receitaAdicionada);
-        }catch (RegraDeNegocioException e){
-            throw new RuntimeException(e);
+        if (usuarioById != null) {
+            Usuario usuarioConvertido = objectMapper.convertValue(usuarioById, Usuario.class);
+            Receita entity = objectMapper.convertValue(receita, Receita.class);
+            entity.setUsuario(usuarioConvertido);
+            Receita receitaAdicionada = receitaRepository.save(entity);
+            return convertToDTO(receitaAdicionada);
+        } else {
+            throw new RegraDeNegocioException("Usuário não encontrado");
         }
     }
 
@@ -69,37 +63,34 @@ public class ReceitaService {
         }
     }
 
-    public List<ReceitaDTO> findAll(Integer pagina, Integer quantidadeRegistros) {
-        Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
-        Page<Receita> receitas = receitaRepository.findAll(pageable);
-        List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas.getContent());
+    public List<ReceitaDTO> findAll() {
+        List<Receita> receitas = receitaRepository.findAll();
+        List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
         return receitasDTO;
     }
 
-    public List<ReceitaDTO> findByUsuario(Integer idUsuario) {
-        try {
-            UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
-            Usuario usuarioEntity = objectMapper.convertValue(usuarioById, Usuario.class);
-            if (usuarioEntity == null) {
-                throw new RegraDeNegocioException("Usuario não encontrado");
-            }
+    public List<ReceitaDTO> findByUsuario(Integer idUsuario) throws RegraDeNegocioException {
+        UsuarioDTO usuarioById = usuarioService.listarPessoasPorId(idUsuario);
+        Usuario usuarioEntity = objectMapper.convertValue(usuarioById, Usuario.class);
+
+        if (usuarioEntity != null) {
             List<Receita> receitas = receitaRepository.findByUsuario(usuarioEntity);
             List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas);
             return receitasDTO;
-        } catch (RegraDeNegocioException e) {
-            throw new RuntimeException(e);
+        } else {
+            throw new RegraDeNegocioException("Usuario não encontrado");
         }
     }
 
-    public ReceitaDTO findById(Integer id) {
+    public ReceitaDTO findById(Integer id) throws EntidadeNaoEncontradaException {
         return convertToDTO(returnReceitaEntityById(id));
     }
 
     public Receita returnReceitaEntityById(Integer id) {
         try {
             return receitaRepository.findById(id)
-                    .orElseThrow(() -> new RegraDeNegocioException("Receita não encontrada"));
-        } catch (RegraDeNegocioException e) {
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Receita não encontrada"));
+        } catch (EntidadeNaoEncontradaException e) {
             throw new RuntimeException(e);
         }
     }
