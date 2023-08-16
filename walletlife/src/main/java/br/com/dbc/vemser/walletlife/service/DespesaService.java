@@ -86,7 +86,11 @@ public class DespesaService {
         return despesaDTOS;
     }
 
-    public DespesaDTO findById(Integer id) throws EntidadeNaoEncontradaException {
+    public DespesaDTO findById(Integer id) throws RegraDeNegocioException, EntidadeNaoEncontradaException {
+        Optional<Despesa> despesaOP = despesaRepository.findById(id);
+        if (despesaOP.isEmpty()){
+            throw new RegraDeNegocioException("Despesa não encontrada");
+        }
         return convertToDTO(returnDespesaEntityById(id));
     }
 
