@@ -2,9 +2,11 @@ package br.com.dbc.vemser.walletlife.doc;
 
 import br.com.dbc.vemser.walletlife.dto.*;
 import br.com.dbc.vemser.walletlife.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.walletlife.modelos.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +60,7 @@ public interface UsuarioControllerDoc {
             }
     )
     @GetMapping("/usuario-receita")
-    public ResponseEntity<List<UsuarioComReceitaDTO>> findallUsuarioReceita(
+    public ResponseEntity<Page<UsuarioComReceitaDTO>> findallUsuarioReceita(
             Integer pagina, Integer quantidadeRegistros,
             @RequestParam(value = "valor", required = false) Double valor);
 
@@ -73,7 +75,7 @@ public interface UsuarioControllerDoc {
             }
     )
     @GetMapping("/usuario-investimento")
-    public ResponseEntity<List<UsuarioComInvestimentoDTO>> findUsuariosByInvestimentoCorretora(
+    public ResponseEntity<Page<UsuarioComInvestimentoDTO>> findUsuariosByInvestimentoCorretora(
             Integer pagina, Integer quantidadeRegistros,
             @RequestParam(value = "corretora", required = false) String corretora);
 
@@ -87,7 +89,7 @@ public interface UsuarioControllerDoc {
             }
     )
     @GetMapping("/usuario-dados")
-    public ResponseEntity<List<UsuarioDadosDTO>> findUsuarioDados(
+    public ResponseEntity<Page<UsuarioDadosDTO>> findUsuarioDados(
             @RequestParam(value = "idUsuario", required = false) Integer idUsuario, Integer pagina,
             Integer quantidadeRegistros) throws RegraDeNegocioException;
 

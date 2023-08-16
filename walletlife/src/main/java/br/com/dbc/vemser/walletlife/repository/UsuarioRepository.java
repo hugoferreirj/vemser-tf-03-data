@@ -44,5 +44,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
 
     @Query("Select u From Usuario u where (:idUsuario is null or u.idUsuario = :idUsuario)")
-    Page<Usuario> findAllComOptional(@Param("idUsuario") Integer idUsuario, Pageable pageable);
+    Page<UsuarioDadosDTO> findAllComOptional(@Param("idUsuario") Integer idUsuario, Pageable pageable);
 }
