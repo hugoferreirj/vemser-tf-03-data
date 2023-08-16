@@ -5,6 +5,7 @@ import br.com.dbc.vemser.walletlife.dto.ReceitaDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public interface ReceitaControllerDoc {
             }
     )
     @GetMapping
-    public ResponseEntity<List<ReceitaDTO>> findAll(Integer pagina, Integer quantidadeRegistros);
+    public ResponseEntity<Page<ReceitaDTO>> findAll(Integer pagina, Integer quantidadeRegistros);
 
     @Operation(summary = "Buscar receita no banco", description = "Busca no banco a receita a partir de um ID")
     @ApiResponses(

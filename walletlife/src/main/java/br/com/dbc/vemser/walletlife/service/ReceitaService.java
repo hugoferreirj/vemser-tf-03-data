@@ -69,11 +69,10 @@ public class ReceitaService {
         }
     }
 
-    public List<ReceitaDTO> findAll(Integer pagina, Integer quantidadeRegistros) {
+    public Page<ReceitaDTO> findAll(Integer pagina, Integer quantidadeRegistros) {
         Pageable pageable = PageRequest.of(pagina, quantidadeRegistros);
-        Page<Receita> receitas = receitaRepository.findAll(pageable);
-        List<ReceitaDTO> receitasDTO = this.convertToDTOList(receitas.getContent());
-        return receitasDTO;
+        Page<ReceitaDTO> receitas = receitaRepository.findAllPages(pageable);
+        return receitas;
     }
 
     public List<ReceitaDTO> findByUsuario(Integer idUsuario) {
