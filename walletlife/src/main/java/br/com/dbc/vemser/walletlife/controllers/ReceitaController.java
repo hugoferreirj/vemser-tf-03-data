@@ -5,6 +5,7 @@ import br.com.dbc.vemser.walletlife.dto.ReceitaCreateDTO;
 import br.com.dbc.vemser.walletlife.dto.ReceitaDTO;
 import br.com.dbc.vemser.walletlife.service.ReceitaService;
 import lombok.Data;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +23,7 @@ public class ReceitaController implements ReceitaControllerDoc {
     private final ReceitaService receitaService;
 
     @GetMapping
-    public ResponseEntity<List<ReceitaDTO>> findAll(Integer pagina, Integer quantidadeRegistros) {
+    public ResponseEntity<Page<ReceitaDTO>> findAll(Integer pagina, Integer quantidadeRegistros) {
         return new ResponseEntity<>(receitaService.findAll(pagina, quantidadeRegistros), HttpStatus.OK);
     }
 
